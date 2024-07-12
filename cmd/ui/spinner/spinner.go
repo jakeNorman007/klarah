@@ -10,15 +10,16 @@ import (
 type errMsg error
 
 type model struct {
-	spinner  spinner.Model
-	quitting bool
-	err      error
+	spinner spinner.Model
+	quit    bool
+	err     error
 }
 
 func initialModel() model {
 	s := spinner.New()
-	s.Spinner = spinner.Dot
+	s.Spinner = spinner.Pulse
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+
 	return model{spinner: s}
 }
 
@@ -31,7 +32,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "esc", "ctrl+c":
-			m.quitting = true
+			m.quit = true
 			return m, tea.Quit
 		default:
 			return m, nil
@@ -50,9 +51,11 @@ func (m model) View() string {
 	if m.err != nil {
 		return m.err.Error()
 	}
+
 	str := fmt.Sprintf("\n\n   %s Loading...press q to quit\n\n", m.spinner.View())
-	if m.quitting {
+	if m.quit {
 		return str + "\n"
 	}
+
 	return str
 }
