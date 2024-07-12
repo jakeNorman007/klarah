@@ -23,7 +23,7 @@ type Item struct {
 
 func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step {
     step := &Step {
-        map[string]Schema{
+        map[string]Schema {
             "framework": {
                 Name: "Project framework",
                 Options: []Item{
