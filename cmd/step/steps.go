@@ -31,6 +31,10 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Title: "Standard library",
                         Description: "Built in library for creating http servers",
                     },
+                    {
+                        Title: "Another framework",
+                        Description: "Another framework you could probably pick",
+                    },
                 },
                 Headers: "Choose your framework",
                 Field: frameworkType.String(),

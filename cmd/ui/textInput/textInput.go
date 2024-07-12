@@ -58,6 +58,23 @@ func InitTextInputModel(output *Output, header string, program *program.Project)
     }
 }
 
+func CreateErrorInputModel(err error) model {
+    txtInp := textinput.New()
+    txtInp.Focus()
+    txtInp.CharLimit = 156
+    txtInp.Width = 20
+    exit := true
+
+    return model {
+        textInput: txtInp,
+        err:       errors.New(errorStyle.Render(err.Error())),
+        output:    nil,
+        header:    "", 
+        exit:      &exit,
+    }
+
+}
+
 func (m model) Init() tea.Cmd {
     return textinput.Blink
 }
@@ -92,7 +109,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-    return fmt.Sprintf("%s/n/n%s/n/n", m.header, m.textInput.View())
+    return fmt.Sprintf("%s%s\n\n", m.header, m.textInput.View())
 }
 
 func (m model) Err() string {

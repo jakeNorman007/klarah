@@ -21,7 +21,7 @@ func (f *Framework) Type() string {
     return "Framework"
 }
 
-func (f *Framework) SetFramework(value string) error {
+func (f *Framework) Set(value string) error {
     for _, frmwrk := range FrameworkTypes {
         if frmwrk == value {
             *f = Framework(value)

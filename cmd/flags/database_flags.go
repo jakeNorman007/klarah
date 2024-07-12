@@ -21,7 +21,7 @@ func (d *Database) Type() string {
     return "Database"
 }
 
-func (d *Database) SetDatabase(value string) error {
+func (d *Database) Set(value string) error {
     for _, datbse := range DatabaseTypes {
         if datbse == value {
             *d = Database(value)
