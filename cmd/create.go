@@ -42,7 +42,7 @@ type Options struct {
 
 var createCmd = &cobra.Command {
 	Use:   "create",
-	Short: "Create a project using the klara scaffolding tool",
+	Short: "Create a project using the klarah scaffolding tool",
 	Long: ``,
 
 	Run: func(cmd *cobra.Command, args []string) {

@@ -39,6 +39,7 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                 Headers: "Choose your framework",
                 Field: frameworkType.String(),
             },
+
             "database driver": {
                 Name: "Project database driver",
                 Options: []Item{

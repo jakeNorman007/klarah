@@ -1,11 +1,10 @@
 package utilities
 
 import (
-	"bytes"
 	"fmt"
+	"bytes"
 	"os/exec"
 	"strings"
-
 	"github.com/spf13/pflag"
 )
 

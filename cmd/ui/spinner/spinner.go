@@ -33,16 +33,19 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "q", "esc", "ctrl+c":
 			m.quit = true
+
 			return m, tea.Quit
 		default:
 			return m, nil
 		}
 	case errMsg:
 		m.err = msg
+
 		return m, nil
 	default:
 		var cmd tea.Cmd
 		m.spinner, cmd = m.spinner.Update(msg)
+
 		return m, cmd
 	}
 }

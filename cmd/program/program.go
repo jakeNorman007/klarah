@@ -1,11 +1,10 @@
 package program
 
 import (
-	"log"
 	"os"
-
-	"github.com/JakeNorman007/klarah/cmd/flags"
+	"log"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/JakeNorman007/klarah/cmd/flags"
 )
 
 type Project struct {
