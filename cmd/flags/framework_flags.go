@@ -8,7 +8,7 @@ import (
 type Framework string
 
 const (
-    StandardLibrary Framework = "std-lib"
+    StandardLibrary Framework = "standard-library"
 )
 
 var FrameworkTypes = []string{string(StandardLibrary)}

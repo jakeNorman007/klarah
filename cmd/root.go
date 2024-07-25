@@ -9,7 +9,6 @@ var rootCmd = &cobra.Command {
 	Use:   "klarah",
 	Short: "A scaffolding tool for spinning up a quick Golang backend/API for your side projects.",
 	Long: "",
-	//Run: func(cmd *cobra.Command, args []string) { },
 }
 
 func Execute() {
