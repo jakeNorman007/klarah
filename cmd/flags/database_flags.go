@@ -9,6 +9,7 @@ type Database string
 
 const (
     Postgresql Database = "postgresql"
+    None Database = "none"
 )
 
 var DatabaseTypes = []string{string(Postgresql)}

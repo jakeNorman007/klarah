@@ -1,4 +1,4 @@
-package frameworktemp
+package frameworkTemp
 
 import _"embed"
 

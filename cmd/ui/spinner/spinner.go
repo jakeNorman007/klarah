@@ -15,7 +15,7 @@ type model struct {
 	err     error
 }
 
-func initialModel() model {
+func InitialModelNew() model {
 	s := spinner.New()
 	s.Spinner = spinner.Pulse
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))

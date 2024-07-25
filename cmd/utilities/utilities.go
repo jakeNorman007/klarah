@@ -52,19 +52,20 @@ func ExecuteCmd(name string, args []string, directory string) error {
     return nil
 }
 
-func InitGoModFile(appDirectory string) error {
-    err := ExecuteCmd("go", []string{"mod", "init"}, appDirectory)
-    if err != nil {
+func InitGoModFile(projectName string, appDirectory string) error {
+    if err := ExecuteCmd("go", []string{"mod", "init", projectName}, appDirectory); err != nil {
         return err
     }
 
     return nil
 }
 
-func GoGetPackage(packageName string) error {
-    err := ExecuteCmd("go", []string{"get", "-u"}, packageName)
-    if err != nil {
-        return err
+func GoGetPackage(appDirectory string, packages []string) error {
+    for _, packageName := range packages {
+        err := ExecuteCmd("go", []string{"get", "-u"}, packageName)
+        if err != nil {
+            return err
+        }
     }
 
     return nil

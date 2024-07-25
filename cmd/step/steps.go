@@ -28,7 +28,7 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                 Name: "Project framework",
                 Options: []Item{
                     {
-                        Title: "Standard library",
+                        Title: "standard-library",
                         Description: "Built in library for creating http servers",
                     },
                     {
@@ -44,8 +44,12 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                 Name: "Project database driver",
                 Options: []Item{
                     {
-                        Title: "Postgresql",
+                        Title: "postgresql",
                         Description: "Go Postgresql database driver",
+                    },
+                    {
+                        Title: "none",
+                        Description: "Driverless",
                     },
                 },
                 Headers: "Choose a database driver",
