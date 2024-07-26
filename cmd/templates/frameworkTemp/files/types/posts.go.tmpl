@@ -1,0 +1,20 @@
+package types
+
+type PostsStore interface {
+    CreatePost(Post) error
+    GetPosts() ([]*Post, error)
+    GetPostById(id int) (*Post, error)
+    UpdatePostById(id int, description string) error
+    DeletePost(id int) error
+}
+
+type Post struct {
+    ID          int     `json:"id"`
+    Description string  `json:"description"`
+}
+
+func NewPost(description string) *Post {
+    return &Post {
+        Description: description,
+    }
+}

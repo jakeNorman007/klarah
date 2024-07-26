@@ -34,7 +34,7 @@ func init() {
 
     createCmd.Flags().StringP("name", "n", "", "Name of project")
     createCmd.Flags().VarP(&flagFramework, "framework", "f", fmt.Sprintf("Frameworks to use: %s", strings.Join(flags.FrameworkTypes, ", ")))
-    createCmd.Flags().VarP(&flagDBDriver, "driver", "d", fmt.Sprintf("Databases to use: %s", strings.Join(flags.DatabaseTypes, ", ")))
+    createCmd.Flags().VarP(&flagDBDriver, "database driver", "d", fmt.Sprintf("Databases to use: %s", strings.Join(flags.DatabaseTypes, ", ")))
 }
 
 type Options struct {
@@ -61,7 +61,7 @@ var createCmd = &cobra.Command {
 
 
         flagFramework := flags.Framework(cmd.Flag("framework").Value.String())
-		flagDBDriver := flags.Database(cmd.Flag("driver").Value.String())
+		flagDBDriver := flags.Database(cmd.Flag("database driver").Value.String())
 
         options := Options {
             ProjectName:  &textInput.Output{},
@@ -132,7 +132,7 @@ var createCmd = &cobra.Command {
             project.ExitCLI(tprogram)
 
             project.DBDriver = flags.Database(strings.ToLower(options.DBDriver.Choice))
-            err := cmd.Flag("driver").Value.Set(project.DBDriver.String())
+            err := cmd.Flag("database driver").Value.Set(project.DBDriver.String())
             if err != nil {
                 log.Fatal("failed to set the driver flag value", err)
             }
@@ -200,10 +200,12 @@ func doesDirectoryExistAndIsNotEmpty(name string) bool {
         directoryEntries, err := os.ReadDir(name)
         if err != nil {
             log.Printf("Could not read directory: %v", err)
+            cobra.CheckErr(textInput.CreateErrorInputModel(err))
         }
         if len(directoryEntries) > 0 {
             return true
         }
     }
+
     return false
 }

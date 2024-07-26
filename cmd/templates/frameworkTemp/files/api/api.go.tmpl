@@ -1,0 +1,51 @@
+package api
+
+import (
+	"os"
+	"fmt"
+	"log"
+	"time"
+	"strconv"
+	"net/http"
+	"database/sql"
+	"{{.ProjectName}}/routes"
+	"{{.ProjectName}}/middleware"
+	data "{{.ProjectName}}/stores"
+)
+
+type ApiService struct {
+    addr        string
+    db          *sql.DB
+}
+
+func NewApiService(addr string, db *sql.DB) *ApiService {
+    port, _ := strconv.Atoi(os.Getenv("PORT"))
+
+    return &ApiService {
+        addr:       fmt.Sprintf(":%d", port),
+        db:         db,
+    }
+}
+
+func (s *ApiService) Run() error {
+    router := http.NewServeMux()
+
+    server := http.Server {
+        Addr:           s.addr,
+        Handler:        middleware.Logging(router),
+        IdleTimeout:    time.Minute,
+        ReadTimeout:    10 * time.Second,
+        WriteTimeout:   30 * time.Second,
+    }
+
+    postStore := data.NewStore(s.db)
+    handlers := routes.NewHandler(postStore)
+    handlers.ApiRoutes(router)
+
+    //subrouter
+    //v1 := http.NewServeMux()
+    //v1.Handle("/v1/", http.StripPrefix("/v1/", router))
+
+    log.Println("Server listeneing on port", s.addr)
+    return server.ListenAndServe()
+}

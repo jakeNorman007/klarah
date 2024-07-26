@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 
 	"github.com/JakeNorman007/klarah/cmd/flags"
-	"github.com/JakeNorman007/klarah/cmd/templates/dbDriverTemp"
 	"github.com/JakeNorman007/klarah/cmd/templates/frameworkTemp"
 	"github.com/JakeNorman007/klarah/cmd/utilities"
 	tea "github.com/charmbracelet/bubbletea"
@@ -35,31 +35,33 @@ type Driver struct {
 }
 
 type Templater interface {
-    Main() []byte
+    Main()   []byte
+    Server() []byte
+    Routes() []byte
 }
 
 type DBDriverTemplater interface {
     Service() []byte
-    Env() []byte
 }
 
 var (
     postgresqlPackage = []string{"github.com/jackc/pgx/v5/stdlib"}
 
     godotenvPackage = []string{"github.com/joho/godotenv"}
+    goosePackage = []string{"github.com/pressly/goose/v3/cmd/goose@latest"}
 )
 
 const (
     root = "/"
-    apiPath = "/api"
-    cmdPath = "/cmd"
-    dbPath = "/db"
-    handlersPath = "/handlers"
-    middlewarePath = "/middleware"
-    routesPath = "/routes"
-    storesPath = "/stores"
-    typesPath = "/types"
-    utilsPath = "/utils"
+    apiPath = "api"
+    cmdPath = "cmd"
+    dbPath = "db"
+    handlersPath = "handlers"
+    middlewarePath = "middleware"
+    routesPath = "routes"
+    storesPath = "stores"
+    typesPath = "types"
+    utilsPath = "utils"
 )
 
 func (p *Project) ExitCLI(tprogram *tea.Program) {
@@ -82,7 +84,7 @@ func (p *Project) createFrameworkMap() {
 func (p *Project) createDBDriverMap() {
     p.DBDriverMap[flags.Postgresql] = Driver {
         packageName: postgresqlPackage,
-        templater: dbDriverTemp.PostgresqlTemplate{},
+        templater: frameworkTemp.PostgresqlTemplate{},
     }
 }
 
@@ -97,9 +99,9 @@ func (p *Project) CreateMainFile() error {
 
     projectPath := filepath.Join(p.AbsolutePath, p.ProjectName)
     if _, err := os.Stat(projectPath); os.IsNotExist(err) {
-        err := os.MkdirAll(projectPath, 0o754)
+        err := os.MkdirAll(projectPath, 0o751)
         if err != nil {
-            log.Printf("Error creating projects root directory %v\n", err)
+            log.Printf("Error creating projects root directory %v", err)
             return err
         }
     }
@@ -108,14 +110,49 @@ func (p *Project) CreateMainFile() error {
 
     err := utilities.InitGoModFile(p.ProjectName, projectPath)
     if err != nil {
-        log.Printf("Could not initialize go.mod file in new project: %v\n", err)
+        log.Printf("Could not initialize go.mod file in new project: %v", err)
         cobra.CheckErr(err)
     }
 
     if p.ProjectType != flags.StandardLibrary {
         err = utilities.GoGetPackage(projectPath, p.FrameworkMap[p.ProjectType].packageName)
         if err != nil {
-            log.Printf("Could not install go dependencies for the chosen framework, %v\n", err)
+            log.Printf("Could not install go dependencies for the chosen framework, %v", err)
+            cobra.CheckErr(err)
+        }
+    }
+
+    if p.DBDriver != "none" {
+        p.createDBDriverMap()
+        err = utilities.GoGetPackage(projectPath, p.DBDriverMap[p.DBDriver].packageName)
+        if err != nil {
+            log.Printf("Could not install dependency for chosen driver %v", err)
+            cobra.CheckErr(err)
+        }
+
+        err = p.CreatePath(dbPath, projectPath)
+        if err != nil {
+            log.Printf("Error in creating path: %s", dbPath)
+            cobra.CheckErr(err)
+            return err
+        }
+
+        err = p.CreateFileAndInjectTemp(dbPath, projectPath, "database.go", "db")
+        if err != nil {
+            log.Printf("Error injecting database.go file: %s", dbPath)
+            cobra.CheckErr(err)
+            return err
+        }
+
+        err = utilities.GoGetPackage(projectPath, godotenvPackage)
+        if err != nil {
+            log.Printf("Could not install dependency: %v", err)
+            cobra.CheckErr(err)
+        }
+
+        err = utilities.GoGetPackage(projectPath, goosePackage)
+        if err != nil {
+            log.Printf("Could not install dependency: %v", err)
             cobra.CheckErr(err)
         }
     }
@@ -140,12 +177,17 @@ func (p *Project) CreatePath(pathToCreate string, projectPath string) error {
 
 func (p *Project) CreateFileAndInjectTemp(pathToCreate string, projectPath string, fileName string, methodName string) error {
     createdFile, err := os.Create(filepath.Join(projectPath, pathToCreate, fileName, methodName))
-    
     if err != nil {
         return err
     }
     
     defer createdFile.Close()
+
+    switch methodName {
+    case "db":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.DBDriverMap[p.DBDriver].templater.Service())))
+        err = createdTemplate.Execute(createdFile, p)
+    }
 
     return nil
 }

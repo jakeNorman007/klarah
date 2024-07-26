@@ -1,0 +1,10 @@
+package handlers
+
+import (
+	"net/http"
+	"{{.ProjectName}}/utils"
+)
+
+func HelloWorldHandler(w  http.ResponseWriter, r *http.Request) {
+    utils.WriteJSON(w, http.StatusOK, map[string]string{ "Hello": "World" })
+}

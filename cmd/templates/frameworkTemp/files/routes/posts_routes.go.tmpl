@@ -1,0 +1,108 @@
+package routes
+
+import (
+	"fmt"
+	"strconv"
+	"net/http"
+	"{{.ProjectName}}/types"
+	"{{.ProjectName}}/utils"
+	"{{.ProjectName}}/handlers"
+)
+
+type Handler struct {
+    store types.PostsStore
+}
+
+func NewHandler(store types.PostsStore) *Handler {
+    return &Handler{store: store}
+}
+
+func (h *Handler) ApiRoutes(router *http.ServeMux) {
+    router.HandleFunc("GET /", handlers.HelloWorldHandler)
+
+    router.HandleFunc("POST /posts", h.HandleCreatePost)
+    router.HandleFunc("GET /posts", h.HandleGetPosts)
+    router.HandleFunc("GET /post/{id}", h.HandleGetPostById)
+    router.HandleFunc("PUT /post/{id}", h.HandleUpdatePostById)
+    router.HandleFunc("DELETE /post/{id}", h.HandleDeletePost)
+}
+
+func (h *Handler) HandleCreatePost(w http.ResponseWriter, r *http.Request) {
+    var post types.Post
+    if err := utils.ParseJSON(r, &post); err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err)
+    }
+
+    err := h.store.CreatePost(post)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err)
+    }
+
+    utils.WriteJSON(w, http.StatusCreated, post)
+}
+
+func (h *Handler) HandleGetPosts(w http.ResponseWriter, r *http.Request) {
+    posts, err := h.store.GetPosts()
+    if err != nil {
+        utils.WriteError(w, http.StatusInternalServerError, err)
+        return
+    }
+
+    utils.WriteJSON(w, http.StatusOK, posts)
+}
+
+func (h *Handler) HandleGetPostById(w http.ResponseWriter, r *http.Request) {
+    idStr := r.PathValue("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Post id not found"))
+        return
+    }
+
+    post, err := h.store.GetPostById(id)
+    if err != nil {
+        utils.WriteError(w, http.StatusInternalServerError, err)
+        return
+    }
+
+    utils.WriteJSON(w, http.StatusOK, post)
+}
+
+func (h *Handler) HandleUpdatePostById(w http.ResponseWriter, r *http.Request) {
+    idStr := r.PathValue("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Post id not found"))
+        return
+    }
+
+    var UpdateRequestBody struct {
+        Description string `json:"description"`
+    }
+    if err := utils.ParseJSON(r, &UpdateRequestBody); err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err)
+    }
+
+    err = h.store.UpdatePostById(id, UpdateRequestBody.Description)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Could not update post"))
+        return
+    }
+
+    utils.WriteJSON(w, http.StatusOK, map[string]int{ "Updated post id:": id })
+}
+
+func (h *Handler) HandleDeletePost(w http.ResponseWriter, r *http.Request) {
+    idStr := r.PathValue("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Post id not found"))
+        return
+    }
+
+    if err := h.store.DeletePost(id); err != nil {
+        return 
+    }
+
+    utils.WriteJSON(w, http.StatusOK, map[string]int{ "Deleted post id:": id })
+}

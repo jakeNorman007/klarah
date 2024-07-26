@@ -62,7 +62,7 @@ func InitGoModFile(projectName string, appDirectory string) error {
 
 func GoGetPackage(appDirectory string, packages []string) error {
     for _, packageName := range packages {
-        err := ExecuteCmd("go", []string{"get", "-u"}, packageName)
+        err := ExecuteCmd("go", []string{"get", "-u", packageName}, appDirectory)
         if err != nil {
             return err
         }

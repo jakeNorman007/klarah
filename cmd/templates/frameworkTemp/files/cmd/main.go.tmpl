@@ -1,0 +1,18 @@
+package main
+
+import (
+    "log"
+	"{{.ProjectName}}/db"
+	"{{.ProjectName}}/api"
+	_ "github.com/joho/godotenv/autoload"
+)
+
+func main() {
+    dbConnect := database.NewDatabaseService()
+    database.InitDatabase(dbConnect)
+
+    server := api.NewApiService("PORT", dbConnect)
+    if err := server.Run(); err != nil {
+        log.Fatal(err)
+    }
+}
