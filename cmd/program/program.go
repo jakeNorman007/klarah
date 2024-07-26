@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/JakeNorman007/klarah/cmd/flags"
+	"github.com/JakeNorman007/klarah/cmd/templates/dbDriverTemp"
 	"github.com/JakeNorman007/klarah/cmd/templates/frameworkTemp"
 	"github.com/JakeNorman007/klarah/cmd/utilities"
 	tea "github.com/charmbracelet/bubbletea"
@@ -35,9 +36,15 @@ type Driver struct {
 }
 
 type Templater interface {
-    Main()   []byte
-    Server() []byte
-    Routes() []byte
+    Main()          []byte
+    Api()           []byte
+    Handlers()      []byte
+    Middleware()    []byte
+    Migrations()    []byte
+    Routes()        []byte
+    Stores()        []byte
+    Types()         []byte
+    Utils()         []byte
 }
 
 type DBDriverTemplater interface {
@@ -84,7 +91,7 @@ func (p *Project) createFrameworkMap() {
 func (p *Project) createDBDriverMap() {
     p.DBDriverMap[flags.Postgresql] = Driver {
         packageName: postgresqlPackage,
-        templater: frameworkTemp.PostgresqlTemplate{},
+        templater: dbDriverTemp.PostgresqlTemplate{},
     }
 }
 
@@ -137,7 +144,7 @@ func (p *Project) CreateMainFile() error {
             return err
         }
 
-        err = p.CreateFileAndInjectTemp(dbPath, projectPath, "database.go", "db")
+        err = p.CreateFileAndInjectTemp(dbPath, projectPath, "database.go", "database")
         if err != nil {
             log.Printf("Error injecting database.go file: %s", dbPath)
             cobra.CheckErr(err)
@@ -161,10 +168,9 @@ func (p *Project) CreateMainFile() error {
 }
 
 func (p *Project) CreatePath(pathToCreate string, projectPath string) error {
-    path := filepath.Join(pathToCreate, projectPath)
-
+    path := filepath.Join(projectPath, pathToCreate)
     if _, err := os.Stat(path); os.IsNotExist(err) {
-        err := os.Mkdir(path, 0o751) //0o751 specifies the permissions: owner full, group: r, x, others: r
+        err := os.MkdirAll(path, 0o751) //0o751 specifies the permissions: owner full, group: r, x, others: r
         if err != nil {
             log.Printf("Error creating directory %v\n", err)
 
@@ -176,7 +182,7 @@ func (p *Project) CreatePath(pathToCreate string, projectPath string) error {
 }
 
 func (p *Project) CreateFileAndInjectTemp(pathToCreate string, projectPath string, fileName string, methodName string) error {
-    createdFile, err := os.Create(filepath.Join(projectPath, pathToCreate, fileName, methodName))
+    createdFile, err := os.Create(filepath.Join(projectPath, pathToCreate, fileName))
     if err != nil {
         return err
     }
@@ -184,9 +190,13 @@ func (p *Project) CreateFileAndInjectTemp(pathToCreate string, projectPath strin
     defer createdFile.Close()
 
     switch methodName {
-    case "db":
+    case "database":
         createdTemplate := template.Must(template.New(fileName).Parse(string(p.DBDriverMap[p.DBDriver].templater.Service())))
         err = createdTemplate.Execute(createdFile, p)
+    }
+
+    if err != nil {
+        return err
     }
 
     return nil

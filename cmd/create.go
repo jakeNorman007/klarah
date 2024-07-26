@@ -179,11 +179,11 @@ var createCmd = &cobra.Command {
         }
 
         fmt.Println(endingMessageStyle.Render("\nNext steps:"))
-        fmt.Println(endingMessageStyle.Render(fmt.Sprintf("cd into your newly created project with: cd %s /n", project.ProjectName)))
+        fmt.Println(endingMessageStyle.Render(fmt.Sprintf("cd into your newly created project with: cd %s\n", project.ProjectName)))
 
         if isInteractive {
             nonInteractiveCommand := utilities.NonInteractiveCommand(cmd.Use, cmd.Flags())
-            fmt.Println(tipMessageStyle.Render("Tip:"))
+            fmt.Println(tipMessageStyle.Render("Tip:\n"))
             fmt.Println(tipMessageStyle.Italic(false).Render(fmt.Sprintf("%s\n", nonInteractiveCommand)))
         }
 
