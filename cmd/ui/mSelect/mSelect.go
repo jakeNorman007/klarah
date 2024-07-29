@@ -11,8 +11,8 @@ import (
 var (
     focusStyle = lipgloss.NewStyle()
     titleStyle = lipgloss.NewStyle()
-    selectedItemStyle = lipgloss.NewStyle()
-    selectedItemDescriptionStyle = lipgloss.NewStyle()
+    selectedItemStyle = lipgloss.NewStyle().PaddingLeft(1)
+    selectedItemDescriptionStyle = lipgloss.NewStyle().PaddingLeft(1)
     descriptionStyle = lipgloss.NewStyle()
 )
 
@@ -89,7 +89,7 @@ func (m model) View() string {
     for i, option := range m.options {
         cursor := " "
         if m.cursor == i {
-            cursor = focusStyle.Render(">")
+            cursor = focusStyle.Render("->")
             option.Title = selectedItemStyle.Render(option.Title)
             option.Description = selectedItemStyle.Render(option.Description)
         }
@@ -102,10 +102,10 @@ func (m model) View() string {
         title := focusStyle.Render(option.Title)
         description := focusStyle.Render(option.Description)
 
-        s += fmt.Sprintf("%s (%s) %s\n%s\n\n", cursor, checked, title, description)
+        s += fmt.Sprintf("%s %s %s: %s\n\n", cursor, checked, title, description)
     }
 
-    s += fmt.Sprintf("Press %s to confirm your choice.\n\n", focusStyle.Render("y"))
+    s += fmt.Sprintf("Press %s to confirm your choice.\n", focusStyle.Render("y"))
 
     return s
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/JakeNorman007/klarah/cmd/ui/mInput"
 	"github.com/JakeNorman007/klarah/cmd/ui/spinner"
 	"github.com/JakeNorman007/klarah/cmd/ui/textInput"
-	"github.com/JakeNorman007/klarah/cmd/utilities"
+	//"github.com/JakeNorman007/klarah/cmd/utilities"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
@@ -22,9 +22,8 @@ import (
 const logo = "Klarah"
 
 var (
-    logoStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("Red"))
-    tipMessageStyle = lipgloss.NewStyle()
-    endingMessageStyle = lipgloss.NewStyle()
+    logoStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00")).Bold(true)
+	endingMsgStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#50DA00")).Bold(true)
 )
 
 func init() {
@@ -44,7 +43,7 @@ type Options struct {
 }
 
 var createCmd = &cobra.Command {
-	Use:   "create",
+	Use:   "new",
 	Short: "Create a project using the klarah scaffolding tool",
 	Long: ``,
 
@@ -52,7 +51,6 @@ var createCmd = &cobra.Command {
         var tprogram *tea.Program
         var err error
 
-        isInteractive := false
         flagName := cmd.Flag("name").Value.String()
         if flagName != "" && doesDirectoryExistAndIsNotEmpty(flagName) {
             err = fmt.Errorf("%s already exists, is not empty. Choose different name", flagName)
@@ -82,7 +80,6 @@ var createCmd = &cobra.Command {
         fmt.Printf("%s\n", logoStyle.Render(logo))
 
         if project.ProjectName == "" {
-            isInteractive = true
             tprogram := tea.NewProgram(textInput.InitTextInputModel(options.ProjectName, "project name ", project))
             if _, err := tprogram.Run(); err != nil {
                 log.Printf("Project name contains an error: %v", err)
@@ -103,7 +100,6 @@ var createCmd = &cobra.Command {
         }
 
         if project.ProjectType == "" {
-            isInteractive = true
             step := steps.Steps["framework"]
             tprogram = tea.NewProgram(mInput.InitModelMulti(step.Options, options.ProjectType, step.Headers, project))
             if _, err := tprogram.Run(); err != nil {
@@ -122,7 +118,6 @@ var createCmd = &cobra.Command {
         }
 
         if project.DBDriver == "" {
-            isInteractive = true
             step := steps.Steps["database driver"]
             tprogram = tea.NewProgram(mInput.InitModelMulti(step.Options, options.DBDriver, step.Headers, project))
             if _, err := tprogram.Run(); err != nil {
@@ -134,13 +129,13 @@ var createCmd = &cobra.Command {
             project.DBDriver = flags.Database(strings.ToLower(options.DBDriver.Choice))
             err := cmd.Flag("database driver").Value.Set(project.DBDriver.String())
             if err != nil {
-                log.Fatal("failed to set the driver flag value", err)
+                log.Fatal("Failed to set the driver flag value", err)
             }
         }
 
         currentWorkingDirectory, err := os.Getwd()
         if err != nil {
-            log.Printf("could not get current working directory: %v", err)
+            log.Printf("Could not get current working directory: %v", err)
             cobra.CheckErr(textInput.CreateErrorInputModel(err).Err())
         }
 
@@ -161,7 +156,7 @@ var createCmd = &cobra.Command {
         defer func() {
 			if r := recover(); r != nil {
 				fmt.Println("The program encountered an unexpected issue and had to exit. The error was:", r)//better error goes here
-				fmt.Println("If you continue to experience this issue, please post a message on our GitHub")
+				fmt.Println("If you continue to experience this issue, please post a message to our GitHub")
 				if releaseErr := spinner.ReleaseTerminal(); releaseErr != nil {
 					log.Printf("Problem releasing terminal: %v", releaseErr)
 				}
@@ -171,25 +166,18 @@ var createCmd = &cobra.Command {
         err = project.CreateMainFile()
         if err != nil {
             if releaseErr := spinner.ReleaseTerminal(); releaseErr != nil {
-                log.Printf("issue releasing termainl: %v", err)
+                log.Printf("Issue releasing termainl: %v", err)
             }
 
-            log.Printf("issue creating files for project: %v", err)
+            log.Printf("Issue creating files for project: %v", err)
             cobra.CheckErr(textInput.CreateErrorInputModel(err).Err())
         }
 
-        fmt.Println(endingMessageStyle.Render("\nNext steps:"))
-        fmt.Println(endingMessageStyle.Render(fmt.Sprintf("cd into your newly created project with: cd %s\n", project.ProjectName)))
-
-        if isInteractive {
-            nonInteractiveCommand := utilities.NonInteractiveCommand(cmd.Use, cmd.Flags())
-            fmt.Println(tipMessageStyle.Render("Tip:\n"))
-            fmt.Println(tipMessageStyle.Italic(false).Render(fmt.Sprintf("%s\n", nonInteractiveCommand)))
-        }
+        fmt.Println(endingMsgStyle.Render(fmt.Sprintf("Next steps: cd into your newly created project with: cd %s", project.ProjectName)))
 
         err = spinner.ReleaseTerminal()
         if err != nil {
-            log.Printf("could not release terminal: %v", err)
+            log.Printf("Could not release terminal: %v", err)
             cobra.CheckErr(err)
         }
     },

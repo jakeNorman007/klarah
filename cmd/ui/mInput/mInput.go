@@ -10,10 +10,10 @@ import (
 
 var (
     focusStyle = lipgloss.NewStyle()
-    titleStyle = lipgloss.NewStyle().Background(lipgloss.Color("#01FAC6")).Foreground(lipgloss.Color("#030303")).Bold(true).Padding(0, 6, 0)
-    selectedItemStyle = lipgloss.NewStyle()
-    selectedItemDescriptionStyle = lipgloss.NewStyle()
-    descriptionStyle = lipgloss.NewStyle()
+    titleStyle = lipgloss.NewStyle().Background(lipgloss.Color("#59DA00")).Foreground(lipgloss.Color("#030303")).Bold(true).Padding(0, 20)
+    selectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00"))
+    selectedItemDescriptionStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00"))
+    descriptionStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#E7E7E7")).Bold(true)
 )
 
 type Selection struct {
@@ -95,7 +95,7 @@ func (m model) View() string {
     for i, choice := range m.choices {
         cursor := " "
         if m.cursor == i {
-            cursor = focusStyle.Render(">")
+            cursor = focusStyle.Render("->")
             choice.Title = selectedItemStyle.Render(choice.Title)
             choice.Description = selectedItemStyle.Render(choice.Description)
         }
@@ -108,7 +108,7 @@ func (m model) View() string {
         title := focusStyle.Render(choice.Title)
         description := focusStyle.Render(choice.Description)
 
-        s += fmt.Sprintf("%s (%s) %s\n%s\n\n", cursor, checked, title, description)
+        s += fmt.Sprintf("%s %s %s: %s\n\n", cursor, checked, title, description)
     }
 
     s += fmt.Sprintf("Press %s to confirm your choice.\n\n", focusStyle.Render("y"))
