@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/JakeNorman007/klarah/cmd/flags"
+	tpl "github.com/JakeNorman007/klarah/cmd/templates"
 	"github.com/JakeNorman007/klarah/cmd/templates/dbDriverTemp"
 	"github.com/JakeNorman007/klarah/cmd/templates/frameworkTemp"
 	"github.com/JakeNorman007/klarah/cmd/utilities"
@@ -65,6 +66,7 @@ const (
     dbPath = "db"
     handlersPath = "handlers"
     middlewarePath = "middleware"
+    migrationsPath = "migrations"
     routesPath = "routes"
     storesPath = "stores"
     typesPath = "types"
@@ -99,6 +101,7 @@ func (p *Project) CreateMainFile() error {
     if _, err := os.Stat(p.AbsolutePath); os.IsNotExist(err) {
         if err := os.Mkdir(p.AbsolutePath, 0o754); err != nil {
             log.Printf("Could not create directory: %v", err)
+            return err
         }
     }
 
@@ -151,17 +154,217 @@ func (p *Project) CreateMainFile() error {
             return err
         }
 
-        err = utilities.GoGetPackage(projectPath, godotenvPackage)
-        if err != nil {
-            log.Printf("Could not install dependency: %v", err)
-            cobra.CheckErr(err)
-        }
+    }
 
-        err = utilities.GoGetPackage(projectPath, goosePackage)
-        if err != nil {
-            log.Printf("Could not install dependency: %v", err)
-            cobra.CheckErr(err)
-        }
+    err = utilities.GoGetPackage(projectPath, godotenvPackage)
+    if err != nil {
+        log.Printf("Could not install dependency: %v", err)
+        cobra.CheckErr(err)
+    }
+
+    err = utilities.GoGetPackage(projectPath, goosePackage)
+    if err != nil {
+        log.Printf("Could not install dependency: %v", err)
+        cobra.CheckErr(err)
+    }
+
+    err = p.CreatePath(apiPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", apiPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(apiPath, projectPath, "api.go", "api")
+    if err != nil {
+        log.Printf("Error injecting api.go file: %s", apiPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(cmdPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", cmdPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(cmdPath, projectPath, "main.go", "main")
+    if err != nil {
+        log.Printf("Error injecting main.go file: %s", cmdPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(handlersPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", handlersPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(handlersPath, projectPath, "helloWorld_handler.go", "handlers")
+    if err != nil {
+        log.Printf("Error injecting handlers.go file: %s", apiPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(middlewarePath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", middlewarePath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(middlewarePath, projectPath, "logging.go", "middleware")
+    if err != nil {
+        log.Printf("Error injecting logging.go file: %s", middlewarePath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(migrationsPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", migrationsPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(migrationsPath, projectPath, "001_posts.sql", "migrations")
+    if err != nil {
+        log.Printf("Error injecting 001_posts.sql file: %s", migrationsPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(routesPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", routesPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(routesPath, projectPath, "posts_routes.go", "routes")
+    if err != nil {
+        log.Printf("Error injecting posts_routes.go file: %s", routesPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(storesPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", storesPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(storesPath, projectPath, "posts_data.go", "stores")
+    if err != nil {
+        log.Printf("Error injecting posts_data.go file: %s", storesPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(typesPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", typesPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(typesPath, projectPath, "posts.go", "types")
+    if err != nil {
+        log.Printf("Error injecting posts.go file: %s", typesPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(utilsPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", utilsPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(utilsPath, projectPath, "json_utils.go", "utils")
+    if err != nil {
+        log.Printf("Error injecting json_utils.go file: %s", utilsPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(root, projectPath, ".env", "env")
+    if err != nil {
+        log.Printf("Error injecting .env file: %v", err)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    //MAKEFILE
+    makeFile, err := os.Create(filepath.Join(projectPath, "Makefile"))
+    if err != nil {
+        cobra.CheckErr(err)
+        return err
+    }
+    
+    defer makeFile.Close()
+
+    makeFileTemplate := template.Must(template.New("makefile").Parse(string(frameworkTemp.MakeTemplate())))
+    err = makeFileTemplate.Execute(makeFile, p)
+    if err != nil {
+        return err
+    }
+
+    //README
+    readmeFile, err := os.Create(filepath.Join(projectPath, "README.md"))
+    if err != nil {
+        cobra.CheckErr(err)
+        return err
+    }
+    
+    defer readmeFile.Close()
+
+    readmeFileTemplate := template.Must(template.New("readme").Parse(string(frameworkTemp.ReadmeTemplate())))
+    err = readmeFileTemplate.Execute(readmeFile, p)
+    if err != nil {
+        return err
+    }
+
+    //GITIGNORE
+    gitignoreFile, err := os.Create(filepath.Join(projectPath, ".gitignore"))
+    if err != nil {
+        cobra.CheckErr(err)
+        return err
+    }
+    
+    defer gitignoreFile.Close()
+
+    gitignoreFileTemplate := template.Must(template.New(".gitignore").Parse(string(frameworkTemp.GitIgnoreTemplate())))
+    err = gitignoreFileTemplate.Execute(gitignoreFile, p)
+    if err != nil {
+        return err
+    }
+
+    //ENV, for now it goes in anyway. Even if you select no for driver
+    envFile, err := os.Create(filepath.Join(projectPath, ".env"))
+    if err != nil {
+        cobra.CheckErr(err)
+        return err
+    }
+    
+    defer envFile.Close()
+
+    envFileTemplate := template.Must(template.New(".env").Parse(string(tpl.GlobalEnvironmentVariableTemp())))
+    err = envFileTemplate.Execute(envFile, p)
+    if err != nil {
+        return err
+    }
+
+    err = utilities.GoModTidy(projectPath)
+    if err != nil {
+        log.Printf("Could not go tidy in project: %v", err)
+        cobra.CheckErr(err)
     }
 
     return nil
@@ -190,8 +393,35 @@ func (p *Project) CreateFileAndInjectTemp(pathToCreate string, projectPath strin
     defer createdFile.Close()
 
     switch methodName {
+    case "main":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Main())))
+        err = createdTemplate.Execute(createdFile, p)
     case "database":
         createdTemplate := template.Must(template.New(fileName).Parse(string(p.DBDriverMap[p.DBDriver].templater.Service())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "api":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Api())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "handlers":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Handlers())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "middleware":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Middleware())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "migrations":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Migrations())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "routes":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Routes())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "stores":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Stores())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "types":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Types())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "utils":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Utils())))
         err = createdTemplate.Execute(createdFile, p)
     }
 

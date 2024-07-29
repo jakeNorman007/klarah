@@ -12,7 +12,7 @@ const (
     None Database = "none"
 )
 
-var DatabaseTypes = []string{string(Postgresql)}
+var DatabaseTypes = []string{string(Postgresql), string(None)}
 
 func (d Database) String() string {
     return string(d)

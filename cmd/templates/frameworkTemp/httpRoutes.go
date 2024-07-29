@@ -59,7 +59,7 @@ func (s StandardLibTemplate) Stores() []byte {
 }
 
 func (s StandardLibTemplate) Types() []byte {
-    return standardStoresTemplate
+    return standardTypesTemplate
 }
 
 func (s StandardLibTemplate) Utils() []byte {

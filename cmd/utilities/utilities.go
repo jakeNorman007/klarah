@@ -15,21 +15,22 @@ func NonInteractiveCommand(use string, flagSet *pflag.FlagSet) string {
 
     visitFn := func(flag *pflag.Flag) {
         if flag.Name != "help" {
-            featureFlagString := ""
-
-            for _, k := range strings.Split(flag.Value.String(), ",") {
-                if k != "" {
-                    featureFlagString += fmt.Sprintf(" --feature %s", k)
+            if flag.Name == "feature" {
+                featureFlagString := ""
+                for _, k := range strings.Split(flag.Value.String(), ",") {
+                    if k != "" {
+                        featureFlagString += fmt.Sprintf(" --feature %s", k)
+                    }
                 }
-            }
 
-            nonInteractiveCommand += featureFlagString
-        } else if flag.Value.Type() == "bool" {
-            if flag.Value.String() == "true" {
-                nonInteractiveCommand = fmt.Sprintf("%s --%s", nonInteractiveCommand, flag.Name)
+                nonInteractiveCommand += featureFlagString
+            } else if flag.Value.Type() == "bool" {
+                if flag.Value.String() == "true" {
+                    nonInteractiveCommand = fmt.Sprintf("%s --%s", nonInteractiveCommand, flag.Name)
+                }
+            } else {
+                nonInteractiveCommand = fmt.Sprintf("%s --%s %s", nonInteractiveCommand, flag.Name, flag.Value.String())
             }
-        } else {
-            nonInteractiveCommand = fmt.Sprintf("%s --%s %s", nonInteractiveCommand, flag.Name, flag.Value.String())
         }
     }
 
@@ -62,8 +63,7 @@ func InitGoModFile(projectName string, appDirectory string) error {
 
 func GoGetPackage(appDirectory string, packages []string) error {
     for _, packageName := range packages {
-        err := ExecuteCmd("go", []string{"get", "-u", packageName}, appDirectory)
-        if err != nil {
+        if err := ExecuteCmd("go", []string{"get", "-u", packageName}, appDirectory); err != nil {
             return err
         }
     }
@@ -72,8 +72,7 @@ func GoGetPackage(appDirectory string, packages []string) error {
 }
 
 func GoFormat(appDirectory string) error {
-    err := ExecuteCmd("gofmt", []string{"-s", "-w", "."}, appDirectory)
-    if err != nil {
+    if err := ExecuteCmd("gofmt", []string{"-s", "-w", "."}, appDirectory); err != nil {
         return err
     }
 
