@@ -1,0 +1,34 @@
+package database
+
+import (
+	"os"
+	"fmt"
+	"log"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
+    _ "github.com/joho/godotenv/autoload"
+)
+
+type dbService struct {
+    db *sql.DB
+}
+
+func NewDatabaseService() *sql.DB {
+    connectionString := fmt.Sprintf(os.Getenv("SQLITE_DB_URL"))
+
+    db, err := sql.Open("sqlite3", connectionString)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    return db
+}
+
+func InitDatabase(db *sql.DB) {
+    err := db.Ping() 
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    log.Println("Connected to database")
+}

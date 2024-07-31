@@ -4,7 +4,7 @@ import _ "embed"
 
 type SqliteTemplate struct{}
 
-//go:embed 
+//go:embed files/db/sqlite.tmpl
 var SqliteServiceTemplate []byte
 
 func (m SqliteTemplate) Service() []byte {

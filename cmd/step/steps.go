@@ -30,7 +30,7 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Description: "Standard go library for creating http servers",
                     },
                 },
-                Headers: "------------------------ Frameworks ------------------------",
+                Headers: "----------------------------- Frameworks -----------------------------",
                 Field: frameworkType.String(),
             },
 
@@ -45,12 +45,8 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Title: "sqlite",
                         Description: "Lightweight, self-contained SQL database engine",
                     },
-                    {
-                        Title: "mysql",
-                        Description: "Reliable, performant, easy to use database management system",
-                    },
                 },
-                Headers: "--------------------- Database drivers ---------------------",
+                Headers: "-------------------------- Database drivers --------------------------",
                 Field: frameworkType.String(),
             },
         },

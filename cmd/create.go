@@ -27,6 +27,7 @@ var (
 func init() {
     var flagFramework flags.Framework
     var flagDBDriver flags.Database
+
     rootCmd.AddCommand(createCmd)
 
     createCmd.Flags().StringP("name", "n", "", "Name of project")

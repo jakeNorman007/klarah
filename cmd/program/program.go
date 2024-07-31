@@ -54,6 +54,7 @@ type DBDriverTemplater interface {
 
 var (
     postgresqlPackage = []string{"github.com/jackc/pgx/v5/stdlib"}
+    sqlitePackage = []string{"github.com/mattn/go-sqlite3"}
 
     godotenvPackage = []string{"github.com/joho/godotenv"}
     goosePackage = []string{"github.com/pressly/goose/v3/cmd/goose@latest"}
@@ -94,6 +95,10 @@ func (p *Project) createDBDriverMap() {
     p.DBDriverMap[flags.Postgresql] = Driver {
         packageName: postgresqlPackage,
         templater: dbDriverTemp.PostgresqlTemplate{},
+    }
+    p.DBDriverMap[flags.Sqlite] = Driver {
+        packageName: sqlitePackage,
+        templater: dbDriverTemp.SqliteTemplate{},
     }
 }
 

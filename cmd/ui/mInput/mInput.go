@@ -11,7 +11,7 @@ import (
 var (
     yStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00")).Bold(true)
     focusStyle = lipgloss.NewStyle()
-    titleStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#E5FFD3")).Bold(true)
+    titleStyle = lipgloss.NewStyle().BorderStyle(lipgloss.ThickBorder()).BorderForeground(lipgloss.Color("#E5FFD3"))
     selectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00"))
     selectedItemDescriptionStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00"))
     descriptionStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#E7E7E7")).Bold(true)

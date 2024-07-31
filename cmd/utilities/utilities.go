@@ -45,6 +45,7 @@ func ExecuteCmd(name string, args []string, directory string) error {
     command.Dir = directory
 
     var out bytes.Buffer
+
     command.Stdout = &out
     if err := command.Run(); err != nil {
         return err
