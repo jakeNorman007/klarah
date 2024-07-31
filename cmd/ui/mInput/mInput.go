@@ -9,8 +9,9 @@ import (
 )
 
 var (
+    yStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00")).Bold(true)
     focusStyle = lipgloss.NewStyle()
-    titleStyle = lipgloss.NewStyle().Background(lipgloss.Color("#59DA00")).Foreground(lipgloss.Color("#030303")).Bold(true).Padding(0, 20)
+    titleStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#E5FFD3")).Bold(true)
     selectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00"))
     selectedItemDescriptionStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00"))
     descriptionStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#E7E7E7")).Bold(true)
@@ -111,7 +112,7 @@ func (m model) View() string {
         s += fmt.Sprintf("%s %s %s: %s\n\n", cursor, checked, title, description)
     }
 
-    s += fmt.Sprintf("Press %s to confirm your choice.\n\n", focusStyle.Render("y"))
+    s += fmt.Sprintf("Press %s to select and %s to confirm your choice.\n\n", yStyle.Render("enter"), yStyle.Render("y"))
 
     return s
 }

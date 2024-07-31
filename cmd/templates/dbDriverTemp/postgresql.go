@@ -1,8 +1,6 @@
 package dbDriverTemp
 
-import (
-    _ "embed"
-)
+import _ "embed"
 
 type PostgresqlTemplate struct{}
 

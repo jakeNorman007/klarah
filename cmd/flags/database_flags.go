@@ -9,10 +9,9 @@ type Database string
 
 const (
     Postgresql Database = "postgresql"
-    None Database = "none"
 )
 
-var DatabaseTypes = []string{string(Postgresql), string(None)}
+var DatabaseTypes = []string{string(Postgresql)}
 
 func (d Database) String() string {
     return string(d)

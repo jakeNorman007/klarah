@@ -1,8 +1,6 @@
 package step
 
-import (
-	"github.com/JakeNorman007/klarah/cmd/flags"
-)
+import "github.com/JakeNorman007/klarah/cmd/flags"
 
 type Schema struct {
     Name    string
@@ -29,14 +27,10 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                 Options: []Item{
                     {
                         Title: "standard-library",
-                        Description: "Built in library for creating http servers",
-                    },
-                    {
-                        Title: "Another framework",
-                        Description: "Another framework you could probably pick",
+                        Description: "Standard go library for creating http servers",
                     },
                 },
-                Headers: "Choose your framework",
+                Headers: "------------------------ Frameworks ------------------------",
                 Field: frameworkType.String(),
             },
 
@@ -45,14 +39,18 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                 Options: []Item{
                     {
                         Title: "postgresql",
-                        Description: "Go Postgresql database driver",
+                        Description: "Powerful, open-source relational database management system",
                     },
                     {
-                        Title: "none",
-                        Description: "Driverless",
+                        Title: "sqlite",
+                        Description: "Lightweight, self-contained SQL database engine",
+                    },
+                    {
+                        Title: "mysql",
+                        Description: "Reliable, performant, easy to use database management system",
                     },
                 },
-                Headers: "Choose a database driver",
+                Headers: "--------------------- Database drivers ---------------------",
                 Field: frameworkType.String(),
             },
         },
