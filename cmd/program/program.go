@@ -1,19 +1,18 @@
 package program
 
 import (
-	"log"
 	"os"
-	"path/filepath"
+	"log"
 	"strings"
+	"path/filepath"
 	"text/template"
-
+	"github.com/spf13/cobra"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/JakeNorman007/klarah/cmd/flags"
+	"github.com/JakeNorman007/klarah/cmd/utilities"
 	tpl "github.com/JakeNorman007/klarah/cmd/templates"
 	"github.com/JakeNorman007/klarah/cmd/templates/dbDriverTemp"
 	"github.com/JakeNorman007/klarah/cmd/templates/frameworkTemp"
-	"github.com/JakeNorman007/klarah/cmd/utilities"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/spf13/cobra"
 )
 
 type Project struct {
@@ -53,9 +52,13 @@ type DBDriverTemplater interface {
 }
 
 var (
+    //framework options and their packages
+
+    //database driver options and their packages
     postgresqlPackage = []string{"github.com/jackc/pgx/v5/stdlib"}
     sqlitePackage = []string{"github.com/mattn/go-sqlite3"}
 
+    //general packages
     godotenvPackage = []string{"github.com/joho/godotenv"}
     goosePackage = []string{"github.com/pressly/goose/v3/cmd/goose@latest"}
 )
@@ -137,6 +140,7 @@ func (p *Project) CreateMainFile() error {
         }
     }
 
+    //DATABASE DRIVER
     if p.DBDriver != "none" {
         p.createDBDriverMap()
         err = utilities.GoGetPackage(projectPath, p.DBDriverMap[p.DBDriver].packageName)
@@ -161,18 +165,21 @@ func (p *Project) CreateMainFile() error {
 
     }
 
+    //ENV
     err = utilities.GoGetPackage(projectPath, godotenvPackage)
     if err != nil {
         log.Printf("Could not install dependency: %v", err)
         cobra.CheckErr(err)
     }
 
+    //GENERAL BEHIND TEH SCENES PACKAGE INJECTIONS
     err = utilities.GoGetPackage(projectPath, goosePackage)
     if err != nil {
         log.Printf("Could not install dependency: %v", err)
         cobra.CheckErr(err)
     }
 
+    //API
     err = p.CreatePath(apiPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", apiPath)
@@ -187,6 +194,7 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
+    //MAIN
     err = p.CreatePath(cmdPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", cmdPath)
@@ -201,6 +209,7 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
+    //HANDLERS
     err = p.CreatePath(handlersPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", handlersPath)
@@ -214,7 +223,8 @@ func (p *Project) CreateMainFile() error {
         cobra.CheckErr(err)
         return err
     }
-
+    
+    //MIDDLEWARE
     err = p.CreatePath(middlewarePath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", middlewarePath)
@@ -228,7 +238,8 @@ func (p *Project) CreateMainFile() error {
         cobra.CheckErr(err)
         return err
     }
-
+    
+    //MIGRATIONS
     err = p.CreatePath(migrationsPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", migrationsPath)
@@ -243,6 +254,7 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
+    //ROUTES
     err = p.CreatePath(routesPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", routesPath)
@@ -257,6 +269,7 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
+    //STORES
     err = p.CreatePath(storesPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", storesPath)
@@ -271,6 +284,7 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
+    //TYPES
     err = p.CreatePath(typesPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", typesPath)
@@ -285,6 +299,7 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
+    //UTILITIES
     err = p.CreatePath(utilsPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", utilsPath)

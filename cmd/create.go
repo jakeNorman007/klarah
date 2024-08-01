@@ -1,20 +1,20 @@
 package cmd
 
 import (
+	"os"
 	"fmt"
 	"log"
-	"os"
-	"strings"
 	"sync"
+	"strings"
+	"github.com/spf13/cobra"
+	"github.com/charmbracelet/lipgloss"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/JakeNorman007/klarah/cmd/step"
 	"github.com/JakeNorman007/klarah/cmd/flags"
 	"github.com/JakeNorman007/klarah/cmd/program"
-	"github.com/JakeNorman007/klarah/cmd/step"
 	"github.com/JakeNorman007/klarah/cmd/ui/mInput"
 	"github.com/JakeNorman007/klarah/cmd/ui/spinner"
 	"github.com/JakeNorman007/klarah/cmd/ui/textInput"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
-	"github.com/spf13/cobra"
 )
 
 const logo = "Klarah"

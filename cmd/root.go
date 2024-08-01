@@ -7,8 +7,8 @@ import (
 
 var rootCmd = &cobra.Command {
 	Use:   "klarah",
-	Short: "A scaffolding tool for spinning up a quick Golang backend/API for your side projects.",
-	Long: "",
+	Short: "Scaffolding CLI tool that creates a quick backend for a multitude of projects",
+	Long: "Klarah is a template CLI tool that scaffolds a backend using Golang and is ready to go with minimal effort",
 }
 
 func Execute() {
@@ -19,6 +19,5 @@ func Execute() {
 }
 
 func init() {
-	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.klarah.yaml)")
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

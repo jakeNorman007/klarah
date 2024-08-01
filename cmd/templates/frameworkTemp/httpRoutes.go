@@ -5,8 +5,6 @@ import _"embed"
 //go:embed files/api/api.go.tmpl
 var standardApiTemplate []byte
 
-var standardCmdTemplate []byte
-
 //go:embed files/handlers/helloWorld_handler.go.tmpl
 var standardHandlersTemplate []byte
 
