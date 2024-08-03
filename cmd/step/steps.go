@@ -29,6 +29,10 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Title: "standard-library",
                         Description: "Standard go library for creating http servers",
                     },
+                    {
+                        Title: "echo",
+                        Description: "High performing, extensible, framework with minimal overhead",
+                    },
                 },
                 Headers: "----------------------------- Frameworks -----------------------------",
                 Field: frameworkType.String(),

@@ -53,6 +53,7 @@ type DBDriverTemplater interface {
 
 var (
     //framework options and their packages
+    echoPackage = []string{"github.com/labstack/echo/v4", "github.com/labstack/echo/v4/middleware"}
 
     //database driver options and their packages
     postgresqlPackage = []string{"github.com/jackc/pgx/v5/stdlib"}
@@ -91,6 +92,10 @@ func (p *Project) createFrameworkMap() {
     p.FrameworkMap[flags.StandardLibrary] = Framework {
         packageName: []string{},
         templater: frameworkTemp.StandardLibTemplate{},
+    }
+    p.FrameworkMap[flags.Echo] = Framework {
+        packageName: echoPackage,
+        templater: frameworkTemp.EchoTemplate{},
     }
 }
 
@@ -165,7 +170,7 @@ func (p *Project) CreateMainFile() error {
 
     }
 
-    //ENV
+    //ENV SECURITY
     err = utilities.GoGetPackage(projectPath, godotenvPackage)
     if err != nil {
         log.Printf("Could not install dependency: %v", err)
@@ -224,19 +229,35 @@ func (p *Project) CreateMainFile() error {
         return err
     }
     
-    //MIDDLEWARE
-    err = p.CreatePath(middlewarePath, projectPath)
-    if err != nil {
-        log.Printf("Error in creating path: %s", middlewarePath)
-        cobra.CheckErr(err)
-        return err
-    }
+    //MIDDLEWARE AND UTILITIES FOR STANDARD LIBRARY ONLY
+    if p.ProjectType == "standard-library" {
+        err = p.CreatePath(middlewarePath, projectPath)
+        if err != nil {
+            log.Printf("Error in creating path: %s", middlewarePath)
+            cobra.CheckErr(err)
+            return err
+        }
+    
+        err = p.CreateFileAndInjectTemp(middlewarePath, projectPath, "logging.go", "middleware")
+        if err != nil {
+            log.Printf("Error injecting logging.go file: %s", middlewarePath)
+            cobra.CheckErr(err)
+            return err
+        }
 
-    err = p.CreateFileAndInjectTemp(middlewarePath, projectPath, "logging.go", "middleware")
-    if err != nil {
-        log.Printf("Error injecting logging.go file: %s", middlewarePath)
-        cobra.CheckErr(err)
-        return err
+        err = p.CreatePath(utilsPath, projectPath)
+        if err != nil {
+            log.Printf("Error in creating path: %s", utilsPath)
+            cobra.CheckErr(err)
+            return err
+        }
+
+        err = p.CreateFileAndInjectTemp(utilsPath, projectPath, "json_utils.go", "utils")
+        if err != nil {
+            log.Printf("Error injecting json_utils.go file: %s", utilsPath)
+            cobra.CheckErr(err)
+            return err
+        }
     }
     
     //MIGRATIONS
@@ -299,21 +320,9 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //UTILITIES
-    err = p.CreatePath(utilsPath, projectPath)
-    if err != nil {
-        log.Printf("Error in creating path: %s", utilsPath)
-        cobra.CheckErr(err)
-        return err
-    }
+    //UTILITIES FOR STANDARD LIBRARY
 
-    err = p.CreateFileAndInjectTemp(utilsPath, projectPath, "json_utils.go", "utils")
-    if err != nil {
-        log.Printf("Error injecting json_utils.go file: %s", utilsPath)
-        cobra.CheckErr(err)
-        return err
-    }
-
+    //ENVIRONMENT VARIABLES
     err = p.CreateFileAndInjectTemp(root, projectPath, ".env", "env")
     if err != nil {
         log.Printf("Error injecting .env file: %v", err)
@@ -366,7 +375,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //ENV, for now it goes in anyway. Even if you select no for driver
     envFile, err := os.Create(filepath.Join(projectPath, ".env"))
     if err != nil {
         cobra.CheckErr(err)

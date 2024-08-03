@@ -2,6 +2,9 @@ package frameworkTemp
 
 import _ "embed"
 
+//go:embed files/api/echoApi.go.tmpl
+var echoApiTemplate []byte
+
 var echoHandlersTemplate []byte
 
 var echoMiddlewareTemplate []byte
@@ -23,16 +26,11 @@ func (e EchoTemplate) Main() []byte {
 }
 
 func (e EchoTemplate) Api() []byte {
-    return standardApiTemplate
+    return echoApiTemplate
 }
 
 func (e EchoTemplate) Handlers() []byte {
     return echoHandlersTemplate
-}
-
-//PROBABLY WON'T NEED THIS ONE SINCE ECHO HAS MIDDLEWARE BUILT IN
-func (e EchoTemplate) Middleware() []byte {
-    return echoMiddlewareTemplate
 }
 
 func (e EchoTemplate) Migrations() []byte {
@@ -51,7 +49,10 @@ func (e EchoTemplate) Types() []byte {
     return echoTypesTemplate
 }
 
-//PROBABLY WON'T NEED THIS SINCE ECHO USES CONTEXT
-func (e EchoTemplate) Utils() []byte {
-    return echoUtilsTemplate
+func (s EchoTemplate) Middleware() []byte {
+    return nil
+}
+
+func (s EchoTemplate) Utils() []byte {
+    return nil
 }

@@ -1,0 +1,50 @@
+package api
+
+import (
+	"os"
+	"fmt"
+	"time"
+	"strconv"
+	"net/http"
+	"database/sql"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"{{.ProjectName}}/routes"
+	data "{{.ProjectName}}/stores"
+)
+
+type ApiService struct {
+    addr    string
+    db      *sql.DB
+}
+
+func NewApiService(addr string, db *sql.DB) *ApiService {
+    port, _ := strconv.Atoi(os.Getenv("PORT")) 
+
+    return &ApiService{
+        addr:   fmt.Sprintf(":%d", port),
+        db:     db,
+    }
+}
+
+func (s *ApiService) Run() error {
+    router := echo.New()
+    
+    router.Use(middleware.Logger())
+    router.Use(middleware.Recover())
+
+    server := http.Server {
+        Addr:           s.addr ,
+        Handler:        router,
+        IdleTimeout:    time.Minute,
+        ReadTimeout:    10 * time.Second,
+        WriteTimeout:   30 * time.Second,
+    }
+
+    postStore := data.NewStore(s.db)
+    handlers := routes.NewHandler(postStore)
+    handlers.ApiRoutes(router)
+
+    fmt.Println("Server listening on port", s.addr)
+    return server.ListenAndServe()
+}

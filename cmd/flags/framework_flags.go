@@ -9,9 +9,10 @@ type Framework string
 
 const (
     StandardLibrary Framework = "standard-library"
+    Echo Framework = "echo"
 )
 
-var FrameworkTypes = []string{string(StandardLibrary)}
+var FrameworkTypes = []string{string(StandardLibrary), string(Echo)}
 
 func (f Framework) String() string {
     return string(f)
