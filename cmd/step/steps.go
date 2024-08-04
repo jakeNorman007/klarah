@@ -33,6 +33,10 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Title: "echo",
                         Description: "High performing, extensible, framework with minimal overhead",
                     },
+                    {
+                        Title: "chi",
+                        Description: "Lightweight, fast http router that's flexible and powerfull",
+                    },
                 },
                 Headers: "----------------------------- Frameworks -----------------------------",
                 Field: frameworkType.String(),

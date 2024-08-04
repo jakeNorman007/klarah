@@ -54,6 +54,7 @@ type DBDriverTemplater interface {
 var (
     //framework options and their packages
     echoPackage = []string{"github.com/labstack/echo/v4", "github.com/labstack/echo/v4/middleware"}
+	chiPackage = []string{"github.com/go-chi/chi/v5", "github.com/go-chi/chi/v5/middleware"}
 
     //database driver options and their packages
     postgresqlPackage = []string{"github.com/jackc/pgx/v5/stdlib"}
@@ -96,6 +97,10 @@ func (p *Project) createFrameworkMap() {
     p.FrameworkMap[flags.Echo] = Framework {
         packageName: echoPackage,
         templater: frameworkTemp.EchoTemplate{},
+    }
+    p.FrameworkMap[flags.Chi] = Framework {
+        packageName: chiPackage,
+        templater: frameworkTemp.ChiTemplate{},
     }
 }
 
