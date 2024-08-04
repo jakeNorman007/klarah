@@ -5,6 +5,6 @@ import (
 	"{{.ProjectName}}/utils"
 )
 
-func HelloWorldHandler(w  http.ResponseWriter, r *http.Request) {
+func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
     utils.WriteJSON(w, http.StatusOK, map[string]string{ "Hello": "World" })
 }

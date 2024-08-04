@@ -1,0 +1,104 @@
+package routes
+
+import (
+	"net/http"
+	"strconv"
+	"{{.ProjectName}}/utils"
+	"{{.ProjectName}}/handlers"
+	"{{.ProjectName}}/types"
+	"github.com/go-chi/chi/v5"
+)
+
+type Handler struct {
+    store types.PostsStore 
+}
+
+func NewHandler(store types.PostsStore) *Handler {
+    return &Handler{store: store}
+}
+
+func (h *Handler) ApiRoutes(r *chi.Mux) {
+    r.Get("/", handlers.HelloWorldHandler)
+
+    r.Post("/posts", h.HandleCreatePost)
+    r.Get("/posts", h.HandleGetPosts)
+    r.Get("/post/{id}", h.HandleGetPostById)
+    r.Put("/post/{id}", h.HandleUpdatePostById)
+    r.Delete("/post/{id}", h.HandleDeletePost)
+}
+
+func (h *Handler)HandleCreatePost(w http.ResponseWriter, r *http.Request) {
+    var post types.Post
+
+    if err := utils.ParseJSON(r, &post); err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err)
+    }
+
+    if err := h.store.CreatePost(post); err != nil {
+        utils.WriteError(w, http.StatusInternalServerError,err) 
+    }
+
+    utils.WriteJSON(w, http.StatusCreated, post)
+}
+
+func (h *Handler)HandleGetPosts(w http.ResponseWriter, r *http.Request) {
+    posts, err := h.store.GetPosts()
+    if err != nil {
+        utils.WriteError(w, http.StatusInternalServerError, err) 
+    }
+
+    utils.WriteJSON(w, http.StatusCreated, posts)
+}
+
+func (h *Handler)HandleGetPostById(w http.ResponseWriter, r *http.Request) {
+    idStr := chi.URLParam(r, "id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err) 
+    }
+
+    post, err := h.store.GetPostById(id)
+    if err != nil {
+        utils.WriteError(w, http.StatusInternalServerError, err)
+    }
+
+    utils.WriteJSON(w, http.StatusOK, post)
+}
+
+func (h *Handler)HandleUpdatePostById(w http.ResponseWriter, r *http.Request) {
+    type UpdateRequestBody struct {
+        Description string `json:"description"`
+    }
+
+    idStr := chi.URLParam(r, "id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err) 
+    }
+
+    var updateRequestBody UpdateRequestBody
+    if err := utils.ParseJSON(r, &updateRequestBody); err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err) 
+    }
+
+    err = h.store.UpdatePostById(id, updateRequestBody.Description)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err) 
+    }
+
+    utils.WriteJSON(w, http.StatusOK, map[string]int{"Updated post id": id})
+}
+
+func (h *Handler)HandleDeletePost(w http.ResponseWriter, r *http.Request) {
+    idStr := chi.URLParam(r, "id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        utils.WriteError(w, http.StatusBadRequest, err) 
+    }
+
+    if err := h.store.DeletePost(id); err != nil {
+        return
+    }
+
+    utils.WriteJSON(w, http.StatusOK, map[string]int{"Deleted post id": id})
+}

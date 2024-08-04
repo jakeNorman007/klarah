@@ -263,6 +263,20 @@ func (p *Project) CreateMainFile() error {
             cobra.CheckErr(err)
             return err
         }
+    } else if p.ProjectType == "chi" {
+        err = p.CreatePath(utilsPath, projectPath)
+        if err != nil {
+            log.Printf("Error in creating path: %s", utilsPath)
+            cobra.CheckErr(err)
+            return err
+        }
+
+        err = p.CreateFileAndInjectTemp(utilsPath, projectPath, "json_utils.go", "utils")
+        if err != nil {
+            log.Printf("Error injecting json_utils.go file: %s", utilsPath)
+            cobra.CheckErr(err)
+            return err
+        }
     }
     
     //MIGRATIONS
