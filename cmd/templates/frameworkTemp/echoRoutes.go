@@ -5,16 +5,21 @@ import _ "embed"
 //go:embed files/api/echoApi.go.tmpl
 var echoApiTemplate []byte
 
+//go:embed files/handlers/echoHelloWorld_handler.go.tmpl
 var echoHandlersTemplate []byte
 
 var echoMiddlewareTemplate []byte
 
+//go:embed files/migrations/001_posts.sql.tmpl
 var echoMigrationsTemplate []byte
 
+//go:embed files/routes/echo_posts_routes.go.tmpl
 var echoRoutesTemplate []byte
 
+//go:embed files/stores/posts_data.go.tmpl
 var echoStoresTemplate []byte
 
+//go:embed files/types/posts.go.tmpl
 var echoTypesTemplate []byte
 
 var echoUtilsTemplate []byte

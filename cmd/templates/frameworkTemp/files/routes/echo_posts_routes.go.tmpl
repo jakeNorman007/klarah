@@ -1,0 +1,103 @@
+package routes
+
+import (
+	"strconv"
+	"net/http"
+	"github.com/labstack/echo/v4"
+	"{{.ProjectName}}/types"
+	"{{.ProjectName}}/handlers"
+)
+
+type Handler struct {
+    store types.PostsStore 
+}
+
+func NewHandler(store types.PostsStore) *Handler {
+    return &Handler{store: store}
+}
+
+func (h *Handler) ApiRoutes(e *echo.Echo) {
+    e.GET("/", handlers.HelloWorldHandler)
+
+    e.POST("/posts", h.HandleCreatePost)
+    e.GET("/posts", h.HandleGetPosts)
+    e.GET("/post/:id", h.HandleGetPostById)
+    e.PUT("/post/:id", h.HandleUpdatePostById)
+    e.DELETE("/post/:id", h.HandleDeletePost)
+}
+
+func (h *Handler)HandleCreatePost(c echo.Context) error {
+    var post types.Post
+
+    if err := c.Bind(&post); err != nil {
+        return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Invalid payload"})
+    }
+
+    if err := h.store.CreatePost(post); err != nil {
+        return c.JSON(http.StatusInternalServerError, map[string]string{"Error": "Failed to create post"})
+    }
+
+    return c.JSON(http.StatusCreated, post)
+}
+
+func (h *Handler)HandleGetPosts(c echo.Context) error {
+    posts, err := h.store.GetPosts()
+    if err != nil {
+        return c.JSON(http.StatusInternalServerError, map[string]string{"Error": "Failed to get posts"})
+    }
+
+    return c.JSON(http.StatusCreated, posts)
+}
+
+func (h *Handler)HandleGetPostById(c echo.Context) error {
+    idStr := c.Param("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Post id not found"})
+    }
+
+    post, err := h.store.GetPostById(id)
+    if err != nil {
+        return c.JSON(http.StatusInternalServerError, map[string]string{"Error": err.Error()})
+    }
+
+    return c.JSON(http.StatusOK, post)
+}
+
+func (h *Handler)HandleUpdatePostById(c echo.Context) error {
+    type UpdateRequestBody struct {
+        Description string `json:"description"`
+    }
+
+    idStr := c.Param("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Post id not found"})
+    }
+
+    var updateRequestBody UpdateRequestBody
+    if err := c.Bind(&updateRequestBody); err != nil {
+        return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Invalid request body"})
+    }
+
+    err = h.store.UpdatePostById(id, updateRequestBody.Description)
+    if err != nil {
+        return c.JSON(http.StatusBadRequest, map[string]string{"error": "Could not update post"})
+    }
+
+    return c.JSON(http.StatusOK, map[string]int{"Updated post id": id})
+}
+
+func (h *Handler)HandleDeletePost(c echo.Context) error {
+    idStr := c.Param("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Post id not found"})
+    }
+
+    if err := h.store.DeletePost(id); err != nil {
+        return err
+    }
+
+    return c.JSON(http.StatusOK, map[string]int{"Deleted post id": id})
+}
