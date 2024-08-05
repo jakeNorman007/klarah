@@ -54,7 +54,8 @@ type DBDriverTemplater interface {
 var (
     //framework options and their packages
     echoPackage = []string{"github.com/labstack/echo/v4", "github.com/labstack/echo/v4/middleware"}
-	chiPackage = []string{"github.com/go-chi/chi/v5", "github.com/go-chi/chi/v5/middleware"}
+    chiPackage = []string{"github.com/go-chi/chi/v5", "github.com/go-chi/chi/v5/middleware"}
+    ginPackage = []string{"github.com/gin-gonic/gin"}
 
     //database driver options and their packages
     postgresqlPackage = []string{"github.com/jackc/pgx/v5/stdlib"}
@@ -101,6 +102,10 @@ func (p *Project) createFrameworkMap() {
     p.FrameworkMap[flags.Chi] = Framework {
         packageName: chiPackage,
         templater: frameworkTemp.ChiTemplate{},
+    }
+    p.FrameworkMap[flags.Gin] = Framework {
+        packageName: ginPackage,
+        templater: frameworkTemp.GinTemplate{},
     }
 }
 
@@ -150,7 +155,6 @@ func (p *Project) CreateMainFile() error {
         }
     }
 
-    //DATABASE DRIVER
     if p.DBDriver != "none" {
         p.createDBDriverMap()
         err = utilities.GoGetPackage(projectPath, p.DBDriverMap[p.DBDriver].packageName)
@@ -175,21 +179,18 @@ func (p *Project) CreateMainFile() error {
 
     }
 
-    //ENV SECURITY
     err = utilities.GoGetPackage(projectPath, godotenvPackage)
     if err != nil {
         log.Printf("Could not install dependency: %v", err)
         cobra.CheckErr(err)
     }
 
-    //GENERAL BEHIND TEH SCENES PACKAGE INJECTIONS
     err = utilities.GoGetPackage(projectPath, goosePackage)
     if err != nil {
         log.Printf("Could not install dependency: %v", err)
         cobra.CheckErr(err)
     }
 
-    //API
     err = p.CreatePath(apiPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", apiPath)
@@ -204,7 +205,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //MAIN
     err = p.CreatePath(cmdPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", cmdPath)
@@ -219,7 +219,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //HANDLERS
     err = p.CreatePath(handlersPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", handlersPath)
@@ -234,7 +233,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
     
-    //MIDDLEWARE AND UTILITIES FOR STANDARD LIBRARY ONLY
     if p.ProjectType == "standard-library" {
         err = p.CreatePath(middlewarePath, projectPath)
         if err != nil {
@@ -279,7 +277,6 @@ func (p *Project) CreateMainFile() error {
         }
     }
     
-    //MIGRATIONS
     err = p.CreatePath(migrationsPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", migrationsPath)
@@ -294,7 +291,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //ROUTES
     err = p.CreatePath(routesPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", routesPath)
@@ -309,7 +305,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //STORES
     err = p.CreatePath(storesPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", storesPath)
@@ -324,7 +319,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //TYPES
     err = p.CreatePath(typesPath, projectPath)
     if err != nil {
         log.Printf("Error in creating path: %s", typesPath)
@@ -339,9 +333,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //UTILITIES FOR STANDARD LIBRARY
-
-    //ENVIRONMENT VARIABLES
     err = p.CreateFileAndInjectTemp(root, projectPath, ".env", "env")
     if err != nil {
         log.Printf("Error injecting .env file: %v", err)
@@ -349,7 +340,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //MAKEFILE
     makeFile, err := os.Create(filepath.Join(projectPath, "Makefile"))
     if err != nil {
         cobra.CheckErr(err)
@@ -364,7 +354,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //README
     readmeFile, err := os.Create(filepath.Join(projectPath, "README.md"))
     if err != nil {
         cobra.CheckErr(err)
@@ -379,7 +368,6 @@ func (p *Project) CreateMainFile() error {
         return err
     }
 
-    //GITIGNORE
     gitignoreFile, err := os.Create(filepath.Join(projectPath, ".gitignore"))
     if err != nil {
         cobra.CheckErr(err)

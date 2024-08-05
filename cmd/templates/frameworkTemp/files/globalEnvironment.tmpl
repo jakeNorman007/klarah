@@ -1,12 +1,11 @@
 # General environment variables
 PORT=8080
 
-# Postgresql environment variables
-POSTGRES_DB_URL=
+# Database URL
+# Postgresql example: postgres://example:example@example.com/example?sslmode=disable
+# SQLite example: ./test.db
+DB_URL=
 
-# Sqlite environment variables
-SQLITE_DB_URL=
-
-# Migration
-GOOSE_DRIVER=
-GOOSE_DBSTRING=
+# Migration variables, run goose --help in termainal for further instruction
+GOOSE_DRIVER=databse name here
+GOOSE_DBSTRING=database url here, same as DB_URL

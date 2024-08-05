@@ -2,16 +2,22 @@ package frameworkTemp
 
 import _ "embed"
 
+//go:embed files/api/ginApi.go.tmpl
 var ginApiTemplate []byte
 
+//go:embed files/handlers/ginHelloWorld_handler.go.tmpl
 var ginHandlersTemplate []byte
 
+//go:embed files/migrations/001_posts.sql.tmpl
 var ginMigrationsTemplate []byte
 
+//go:embed files/routes/gin_posts_routes.go.tmpl
 var ginRoutesTemplate []byte
 
+//go:embed files/stores/posts_data.go.tmpl
 var ginStoresTemplate []byte
 
+//go:embed files/types/posts.go.tmpl
 var ginTypesTemplate []byte
 
 var ginMiddlewareTemplate []byte

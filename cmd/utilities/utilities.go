@@ -24,10 +24,12 @@ func NonInteractiveCommand(use string, flagSet *pflag.FlagSet) string {
                 }
 
                 nonInteractiveCommand += featureFlagString
+
             } else if flag.Value.Type() == "bool" {
                 if flag.Value.String() == "true" {
                     nonInteractiveCommand = fmt.Sprintf("%s --%s", nonInteractiveCommand, flag.Name)
                 }
+
             } else {
                 nonInteractiveCommand = fmt.Sprintf("%s --%s %s", nonInteractiveCommand, flag.Name, flag.Value.String())
             }

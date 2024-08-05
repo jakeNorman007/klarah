@@ -11,9 +11,10 @@ const (
     StandardLibrary Framework = "standard-library"
     Echo Framework = "echo"
     Chi Framework = "chi"
+    Gin Framework = "gin"
 )
 
-var FrameworkTypes = []string{string(StandardLibrary), string(Echo), string(Chi)}
+var FrameworkTypes = []string{string(StandardLibrary), string(Echo), string(Chi), string(Gin)}
 
 func (f Framework) String() string {
     return string(f)

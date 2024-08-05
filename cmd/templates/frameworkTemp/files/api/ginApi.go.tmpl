@@ -1,0 +1,49 @@
+package api
+
+import (
+	"database/sql"
+	"fmt"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
+	"{{.ProjectName}}/routes"
+	data "{{.ProjectName}}/stores"
+	"github.com/gin-gonic/gin"
+)
+
+type ApiService struct {
+    addr    string
+    db      *sql.DB
+}
+
+func NewApiService(addr string, db *sql.DB) *ApiService {
+    port, _ := strconv.Atoi(os.Getenv("PORT")) 
+
+    return &ApiService{
+        addr:   fmt.Sprintf(":%d", port),
+        db:     db,
+    }
+}
+
+func (s *ApiService) Run() error {
+    //gin.SetMode(gin.ReleaseMode)
+
+    router := gin.Default()
+
+    server := http.Server {
+        Addr:           s.addr ,
+        Handler:        router,
+        IdleTimeout:    time.Minute,
+        ReadTimeout:    10 * time.Second,
+        WriteTimeout:   30 * time.Second,
+    }
+
+    postStore := data.NewStore(s.db)
+    handlers := routes.NewHandler(postStore)
+    handlers.ApiRoutes(router)
+
+    fmt.Println("Server listening on port", s.addr)
+    return server.ListenAndServe()
+}
+

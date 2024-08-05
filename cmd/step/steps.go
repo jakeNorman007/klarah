@@ -37,6 +37,10 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Title: "chi",
                         Description: "Lightweight, fast http router that's flexible and powerfull",
                     },
+                    {
+                        Title: "gin",
+                        Description: "Flexible, router for efficiant and scalable applications",
+                    },
                 },
                 Headers: "----------------------------- Frameworks -----------------------------",
                 Field: frameworkType.String(),
