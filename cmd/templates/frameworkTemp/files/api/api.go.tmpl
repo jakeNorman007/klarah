@@ -42,10 +42,6 @@ func (s *ApiService) Run() error {
     handlers := routes.NewHandler(postStore)
     handlers.ApiRoutes(router)
 
-    //subrouter
-    //v1 := http.NewServeMux()
-    //v1.Handle("/v1/", http.StripPrefix("/v1/", router))
-
     log.Println("Server listeneing on port", s.addr)
     return server.ListenAndServe()
 }

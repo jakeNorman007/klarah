@@ -1,16 +1,16 @@
 package api
 
 import (
-	"database/sql"
-	"fmt"
-	"net/http"
 	"os"
-	"strconv"
+	"fmt"
 	"time"
-	"{{.ProjectName}}/routes"
-	data "{{.ProjectName}}/stores"
+	"strconv"
+	"net/http"
+	"database/sql"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"{{.ProjectName}}/routes"
+	data "{{.ProjectName}}/stores"
 )
 
 type ApiService struct {

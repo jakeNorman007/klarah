@@ -1,15 +1,15 @@
 package api
 
 import (
-	"database/sql"
-	"fmt"
-	"net/http"
 	"os"
-	"strconv"
+	"fmt"
 	"time"
+	"strconv"
+	"net/http"
+	"database/sql"
+	"github.com/gin-gonic/gin"
 	"{{.ProjectName}}/routes"
 	data "{{.ProjectName}}/stores"
-	"github.com/gin-gonic/gin"
 )
 
 type ApiService struct {
@@ -27,6 +27,10 @@ func NewApiService(addr string, db *sql.DB) *ApiService {
 }
 
 func (s *ApiService) Run() error {
+    // when using Gin, it runs in debug mode by default, on server start
+    // you will see some debug information. If you are using for production
+    // or do not want to see the debug info, uncomment the following code
+
     //gin.SetMode(gin.ReleaseMode)
 
     router := gin.Default()
