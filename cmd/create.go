@@ -17,7 +17,21 @@ import (
 	"github.com/JakeNorman007/klarah/cmd/ui/textInput"
 )
 
-const logo = "Klarah"
+const logo = `
+               __      __                            __
+              |  |  __|  |                          |  | 
+              |  | /  /  |                          |  | 
+              |  |/  /|  |                          |  |
+              |  /  / |  |    _____    ____  _____  |  |____
+              |    /  |  |   /  _  \  /  __|/  _  \ |       \
+              |    \  |  |  |  / \  \|  /  |  / \  \|  |---  \
+              |  \  \ |  |_ |  | |  ||  |  |  | |  ||  |  |  |
+              |  |\  \|    ||  \_/  ||  |  |  \_/  ||  |  |  |
+              |__| \__\____| \____/|||__|   \____/|||__|  |__|
+
+                      *** Build backends quickly ***
+            `
+
 
 var (
     logoStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00")).Bold(true)
