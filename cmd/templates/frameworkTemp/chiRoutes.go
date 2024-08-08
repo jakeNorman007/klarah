@@ -62,3 +62,4 @@ func (s ChiTemplate) Middleware() []byte {
 func (s ChiTemplate) Utils() []byte {
     return chiUtilsTemplate
 }
+

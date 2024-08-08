@@ -42,7 +42,7 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Description: "Flexible, router for efficiant and scalable applications",
                     },
                 },
-                Headers: "----------------------------- Frameworks -----------------------------",
+                Headers: "---------------------------------- Frameworks ----------------------------------",
                 Field: frameworkType.String(),
             },
             "database driver": {
@@ -57,7 +57,7 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Description: "Lightweight, self-contained SQL database engine",
                     },
                 },
-                Headers: "-------------------------- Database drivers --------------------------",
+                Headers: "------------------------------- Database drivers -------------------------------",
                 Field: frameworkType.String(),
             },
         },
