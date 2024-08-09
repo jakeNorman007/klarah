@@ -25,6 +25,9 @@ var chiTypesTemplate []byte
 //go:embed files/utils/json_utils.go.tmpl
 var chiUtilsTemplate []byte
 
+//go:embed files/tests/handlers_test.go.tmpl
+var chiTestsTemplate []byte
+
 type ChiTemplate struct {}
 
 func (e ChiTemplate) Main() []byte {
@@ -63,3 +66,6 @@ func (s ChiTemplate) Utils() []byte {
     return chiUtilsTemplate
 }
 
+func (s ChiTemplate) Tests() []byte {
+    return chiTestsTemplate
+}

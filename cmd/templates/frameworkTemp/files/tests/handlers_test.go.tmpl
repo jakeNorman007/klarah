@@ -1,10 +1,11 @@
-package handlers
+package tests
 
 import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"{{.ProjectName}}/handlers"
 )
 
 func TestHandler(t *testing.T) {
@@ -15,7 +16,7 @@ func TestHandler(t *testing.T) {
 
     rr := httptest.NewRecorder()
 
-    handler := http.HandlerFunc(HelloWorldHandler)
+    handler := http.HandlerFunc(handlers.HelloWorldHandler)
     handler.ServeHTTP(rr, request)
 
     if status := rr.Code; status != http.StatusOK {

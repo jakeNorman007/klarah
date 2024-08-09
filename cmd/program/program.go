@@ -43,6 +43,7 @@ type Templater interface {
     Migrations()    []byte
     Routes()        []byte
     Stores()        []byte
+    Tests()         []byte
     Types()         []byte
     Utils()         []byte
 }
@@ -76,6 +77,7 @@ const (
     migrationsPath = "migrations"
     routesPath = "routes"
     storesPath = "stores"
+    testsPath = "tests"
     typesPath = "types"
     utilsPath = "utils"
 )
@@ -228,7 +230,21 @@ func (p *Project) CreateMainFile() error {
 
     err = p.CreateFileAndInjectTemp(handlersPath, projectPath, "helloWorld_handler.go", "handlers")
     if err != nil {
-        log.Printf("Error injecting handlers.go file: %s", apiPath)
+        log.Printf("Error injecting handlers.go file: %s", handlersPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreatePath(testsPath, projectPath)
+    if err != nil {
+        log.Printf("Error in creating path: %s", testsPath)
+        cobra.CheckErr(err)
+        return err
+    }
+
+    err = p.CreateFileAndInjectTemp(testsPath, projectPath, "handlers_test.go", "tests")
+    if err != nil {
+        log.Printf("Error injecting handlers_test.go file: %s", testsPath)
         cobra.CheckErr(err)
         return err
     }
@@ -451,6 +467,9 @@ func (p *Project) CreateFileAndInjectTemp(pathToCreate string, projectPath strin
         err = createdTemplate.Execute(createdFile, p)
     case "stores":
         createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Stores())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "tests":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Tests())))
         err = createdTemplate.Execute(createdFile, p)
     case "types":
         createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Types())))

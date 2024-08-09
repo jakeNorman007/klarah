@@ -24,6 +24,8 @@ var ginMiddlewareTemplate []byte
 
 var ginUtilsTemplate []byte
 
+var ginTestsTemplate []byte
+
 type GinTemplate struct {}
 
 func (e GinTemplate) Main() []byte {
@@ -60,4 +62,8 @@ func (s GinTemplate) Middleware() []byte {
 
 func (s GinTemplate) Utils() []byte {
     return nil
+}
+
+func (s GinTemplate) Tests() []byte {
+    return ginTestsTemplate
 }

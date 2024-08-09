@@ -24,6 +24,8 @@ var echoTypesTemplate []byte
 
 var echoUtilsTemplate []byte
 
+var echoTestsTemplate []byte
+
 type EchoTemplate struct {}
 
 func (e EchoTemplate) Main() []byte {
@@ -52,6 +54,10 @@ func (e EchoTemplate) Stores() []byte {
 
 func (e EchoTemplate) Types() []byte {
     return echoTypesTemplate
+}
+
+func (s EchoTemplate) Tests() []byte {
+    return echoTestsTemplate
 }
 
 func (s EchoTemplate) Middleware() []byte {

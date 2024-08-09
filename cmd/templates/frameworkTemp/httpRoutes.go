@@ -26,6 +26,9 @@ var standardTypesTemplate []byte
 //go:embed files/utils/json_utils.go.tmpl
 var standardUtilsTemplate []byte
 
+//go:embed files/tests/handlers_test.go.tmpl
+var standardTestsTemplate []byte
+
 type StandardLibTemplate struct{}
 
 func (s StandardLibTemplate) Main() []byte {
@@ -62,4 +65,8 @@ func (s StandardLibTemplate) Types() []byte {
 
 func (s StandardLibTemplate) Utils() []byte {
     return standardUtilsTemplate
+}
+
+func (s StandardLibTemplate) Tests() []byte {
+    return standardTestsTemplate
 }

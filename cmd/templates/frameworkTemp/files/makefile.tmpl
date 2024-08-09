@@ -4,6 +4,9 @@ include .env
 run:
 	@go run ./cmd/main.go
 
+test:
+	@go test ./tests
+
 #database commands
 up:
 	@echo migrating up
