@@ -89,7 +89,7 @@ func (h *Handler) HandleUpdatePostById(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    utils.WriteJSON(w, http.StatusOK, map[string]int{ "Updated post id:": id })
+    utils.WriteJSON(w, http.StatusOK, map[string]int{"Updated post id:": id})
 }
 
 func (h *Handler) HandleDeletePost(w http.ResponseWriter, r *http.Request) {

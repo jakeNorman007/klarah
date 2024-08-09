@@ -14,16 +14,16 @@ import (
 )
 
 type ApiService struct {
-    addr        string
-    db          *sql.DB
+    addr    string
+    db      *sql.DB
 }
 
 func NewApiService(addr string, db *sql.DB) *ApiService {
     port, _ := strconv.Atoi(os.Getenv("PORT"))
 
     return &ApiService {
-        addr:       fmt.Sprintf(":%d", port),
-        db:         db,
+        addr:   fmt.Sprintf(":%d", port),
+        db:     db,
     }
 }
 

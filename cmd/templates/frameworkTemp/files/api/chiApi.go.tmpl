@@ -34,7 +34,7 @@ func (s *ApiService) Run() error {
     router.Use(middleware.Recoverer)
 
     server := http.Server {
-        Addr:           s.addr ,
+        Addr:           s.addr,
         Handler:        router,
         IdleTimeout:    time.Minute,
         ReadTimeout:    10 * time.Second,

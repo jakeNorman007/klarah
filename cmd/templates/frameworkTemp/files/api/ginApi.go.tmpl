@@ -36,7 +36,7 @@ func (s *ApiService) Run() error {
     router := gin.Default()
 
     server := http.Server {
-        Addr:           s.addr ,
+        Addr:           s.addr,
         Handler:        router,
         IdleTimeout:    time.Minute,
         ReadTimeout:    10 * time.Second,
@@ -50,4 +50,3 @@ func (s *ApiService) Run() error {
     fmt.Println("Server listening on port", s.addr)
     return server.ListenAndServe()
 }
-

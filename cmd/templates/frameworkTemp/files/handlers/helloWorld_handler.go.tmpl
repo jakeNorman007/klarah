@@ -6,5 +6,5 @@ import (
 )
 
 func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
-    utils.WriteJSON(w, http.StatusOK, map[string]string{ "Hello": "World" })
+    utils.WriteJSON(w, http.StatusOK, map[string]string{"Hello": "World"})
 }

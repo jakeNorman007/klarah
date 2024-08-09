@@ -9,8 +9,8 @@ type PostsStore interface {
 }
 
 type Post struct {
-    ID          int     `json:"id"`
-    Description string  `json:"description"`
+    ID          int    `json:"id"`
+    Description string `json:"description"`
 }
 
 func NewPost(description string) *Post {
