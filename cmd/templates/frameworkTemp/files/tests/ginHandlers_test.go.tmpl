@@ -1,0 +1,58 @@
+package tests
+
+import (
+	"testing"
+	"net/http"
+	"encoding/json"
+	"net/http/httptest"
+	"github.com/gin-gonic/gin"
+	"{{.ProjectName}}/handlers"
+)
+
+func TestHandler(t *testing.T) {
+    s := gin.Default()
+
+    s.GET("/", handlers.HelloWorldHandler)
+
+    request, err := http.NewRequest(http.MethodGet, "/", nil)
+    if err != nil {
+        t.Fatalf("Could not create request: %v", err)
+    }
+
+    recorder := httptest.NewRecorder()
+
+    c, _ := gin.CreateTestContext(recorder)
+    c.Request = request
+
+    s.ServeHTTP(recorder, request)
+
+    if status := recorder.Code; status != http.StatusOK {
+        t.Errorf("Handler returned the wrong status code: got %v, want %v", status, http.StatusOK)
+    }
+
+    if contentType := recorder.Header().Get("Content-Type"); contentType != "application/json; charset=utf-8" {
+        t.Errorf("Header returned the wrong content type: got %v, want %v", contentType, "application/json; charset=utf-8")
+    }
+
+    expected := map[string]string{"Hello":"World"}
+
+    var actual map[string]string
+    if err := json.NewDecoder(recorder.Body).Decode(&actual); err != nil {
+        t.Fatalf("Could not decode response body: %v", err)
+    }
+
+    expectedJSON, err := json.Marshal(expected)
+    if err != nil {
+        t.Fatalf("Could not marshal expected response: %v", err)
+    }
+
+    actualJSON, err := json.Marshal(actual)
+    if err != nil {
+        t.Fatalf("Could not marshal actual response: %v", err)
+    }
+
+    // Compare JSON strings
+    if string(expectedJSON) != string(actualJSON) {
+        t.Errorf("Handler returned unexpected body: got %v want %v", string(actualJSON), string(expectedJSON))
+    }
+}

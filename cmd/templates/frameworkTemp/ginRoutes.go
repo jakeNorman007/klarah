@@ -24,6 +24,7 @@ var ginMiddlewareTemplate []byte
 
 var ginUtilsTemplate []byte
 
+//go:embed files/tests/ginHandlers_test.go.tmpl
 var ginTestsTemplate []byte
 
 type GinTemplate struct {}
