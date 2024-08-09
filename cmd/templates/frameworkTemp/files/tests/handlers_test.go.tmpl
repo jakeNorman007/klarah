@@ -20,7 +20,7 @@ func TestHandler(t *testing.T) {
     handler.ServeHTTP(rr, request)
 
     if status := rr.Code; status != http.StatusOK {
-        t.Errorf("Handler returned wrong stsus code: got %v, wanted %v", status, http.StatusOK)
+        t.Errorf("Handler returned wrong status code: got %v, wanted %v", status, http.StatusOK)
     }
     
     if contentType := rr.Header().Get("Content-Type"); contentType != "application/json" {

@@ -24,6 +24,7 @@ var echoTypesTemplate []byte
 
 var echoUtilsTemplate []byte
 
+//go:embed files/tests/echoHandlers_test.go.tmpl
 var echoTestsTemplate []byte
 
 type EchoTemplate struct {}
