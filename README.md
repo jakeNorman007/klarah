@@ -27,7 +27,7 @@ Klarah has a make file that conveniently keeps all terminal commands organized a
 When you want to start the server after configuration, simply run:
 ```
 make run
-'''
+```
 
 When needing to run the preset tests, or added tests in ./tests, run:
 ```
@@ -39,7 +39,7 @@ Klarah uses goose under the hood to run all your database migrations, after conf
 to migrate your sql up to your databse run:
 ```
 make up
-``
+```
 
 If you need to reverse those migrations run:
 ```
