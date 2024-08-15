@@ -57,7 +57,8 @@ make down
 - [Sqlite](https://github.com/mattn/go-sqlite3)
 
 ## How to use:
-**As it is now, Klarah requires a database connection in order to get the server up and running.**
+> [!NOTE]
+> As it is now, Klarah requires a database connection in order to get the server up and running.**
 
 Download klarah to your GOPATH using:
 ```
@@ -75,7 +76,10 @@ project name > your_project_name
 ```
 
 Next you will see these prompts and asked to pick a framework, followed by a database.
-Use down arrow or j to move cursor down, up arrow or k to move it up.
+
+> [!NOTE]
+> Use down arrow or j to move cursor down, up arrow or k to move it up.**
+
 ![logo](./public/prompt.png)
 
 
