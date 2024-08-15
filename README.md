@@ -47,11 +47,11 @@ make down
 ```
 
 ## Klarah's supported frameworks:
-    - [Standard Library](https://pkg.go.dev/net/http#hdr-Servers)
-    - [Echo](https://github.com/labstack/echo)
-    - [Chi](https://github.com/go-chi/chi)
-    - [Gin](https://github.com/gin-gonic/gin)
+- [Standard Library](https://pkg.go.dev/net/http#hdr-Servers)
+- [Echo](https://github.com/labstack/echo)
+- [Chi](https://github.com/go-chi/chi)
+- [Gin](https://github.com/gin-gonic/gin)
 
 ## Klarah's supported databases:
-    - [Postgresql](https://github.com/jackc/pgx)
-    - [Sqlite](https://github.com/mattn/go-sqlite3)
+- [Postgresql](https://github.com/jackc/pgx)
+- [Sqlite](https://github.com/mattn/go-sqlite3)
