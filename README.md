@@ -55,3 +55,30 @@ make down
 ## Klarah's supported databases:
 - [Postgresql](https://github.com/jackc/pgx)
 - [Sqlite](https://github.com/mattn/go-sqlite3)
+
+## How to use:
+**As it is now, Klarah requires a database connection in order to get the server up and running.**
+
+Download klarah to your GOPATH using:
+```
+Install path goes here
+```
+
+Once downloaded and ready run the command:
+```
+klarah new
+```
+
+You will then be prompted to create a project, once it's named press enter:
+```
+project name > your_project_name
+```
+
+Next you will see these prompts and asked to pick a framework, followed by a database.
+Use down arrow or j to move cursor down, up arrow or k to move it up.
+![logo](./public/prompt.png)
+
+
+## Future features and additions:
+- Air support for live reloading, https://github.com/air-verse/air
+- Option to spin up a databaseless project to make it fit more use cases, to also be more customizable
