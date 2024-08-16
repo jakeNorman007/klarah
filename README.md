@@ -102,7 +102,31 @@ Press enter to select and y to confirm your choice, Ctrl-c to exit.
 Press enter to select and y to confirm your choice, Ctrl-c to exit.
 ```
 
-After your project generates run ```cd your_project_name```
+After your project generates go into the directory with ```cd your_project_name```
+
+To get the server up and running connect to a database and set up your goose variables in .env file
+
+Postgresql set up example:
+
+```
+PORT=8080
+
+DB_URL=postgres://example:example@example.com/example?sslmode=disable
+
+GOOSE_DRIVER=postgres
+GOOSE_DBSTRING=postgres://example:example@example.com/example?sslmode=disable
+```
+
+Run the command ```make run```
+
+You will get the following output in the console
+
+```
+20XX/XX/XX 00:00:00 Connected to database
+20XX/XX/XX 00:00:00 Server listening on port :8080
+```
+
+Congrats! You are ready to start building!
 
 ## Future features and additions:
 - Air support for live reloading, https://github.com/air-verse/air
