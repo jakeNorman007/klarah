@@ -12,7 +12,7 @@ do as much or as little as you want once your project has been generated.
 
 To install Klarah:
 ```
-Install url goes here
+go install github.com/JakeNorman007/klarah@latest
 ```
 
 When installed Klarah creates a binary that attaches directly to your GOPATH, so you can use it whenever you 
@@ -62,7 +62,7 @@ make down
 
 Download klarah to your GOPATH using:
 ```
-Install path goes here
+go install github.com/JakeNorman007/klarah@latest
 ```
 
 Once downloaded and ready run the command:
