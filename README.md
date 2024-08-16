@@ -35,7 +35,7 @@ make test
 ```
 ## Database related commands:
 
-Klarah uses goose under the hood to run all your database migrations, after configuring your database connection,
+Klarah uses [goose](https://github.com/pressly/goose) under the hood to run all your database migrations, after configuring your database connection,
 to migrate your sql up to your databse run:
 ```
 make up
