@@ -22,7 +22,7 @@ need to reach for it.
 
 Klarah has a make file that conveniently keeps all terminal commands organized and easy to use.
 
-### General commands
+### General commands:
 
 When you want to start the server after configuration, simply run:
 ```
@@ -33,7 +33,7 @@ When needing to run the preset tests, or added tests in ./tests, run:
 ```
 make test
 ```
-## Database related commands
+## Database related commands:
 
 Klarah uses goose under the hood to run all your database migrations, after configuring your database connection,
 to migrate your sql up to your databse run:
@@ -56,9 +56,9 @@ make down
 - [Postgresql](https://github.com/jackc/pgx)
 - [Sqlite](https://github.com/mattn/go-sqlite3)
 
-## How to use:
+## Getting started:
 > [!NOTE]
-> As it is now, Klarah requires a database connection in order to get the server up and running.**
+> As it is now, Klarah requires a database connection in order to get the server up and running.
 
 Download klarah to your GOPATH using:
 ```
@@ -78,10 +78,31 @@ project name > your_project_name
 Next you will see these prompts and asked to pick a framework, followed by a database.
 
 > [!NOTE]
-> Use down arrow or j to move cursor down, up arrow or k to move it up.**
+> Use down arrow or j to move cursor down, up arrow or k to move it up.
 
-![logo](./public/prompt.png)
+```
+---------------------------------- Frameworks ----------------------------------
 
+->  standard-library: Standard go library for creating http servers
+
+    echo: High performing, extensible framework with minimal overhead
+
+    chi: Lightweight, fast http router that's flexible and powerfull
+
+    gin: Flexible, router for efficiant and scalable applications
+
+Press enter to select and y to confirm your choice, Ctrl-c to exit.
+
+------------------------------- Database drivers -------------------------------
+
+    postgresql: Powerful, open-source relationa database management system
+
+    sqlite: Lightweight, self-contained SQL database engine
+
+Press enter to select and y to confirm your choice, Ctrl-c to exit.
+```
+
+After your project generates run ```cd your_project_name```
 
 ## Future features and additions:
 - Air support for live reloading, https://github.com/air-verse/air

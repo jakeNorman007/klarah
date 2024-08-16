@@ -31,7 +31,7 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                     },
                     {
                         Title: "echo",
-                        Description: "High performing, extensible, framework with minimal overhead",
+                        Description: "High performing, extensible framework with minimal overhead",
                     },
                     {
                         Title: "chi",
