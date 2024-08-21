@@ -129,6 +129,6 @@ You will get the following output in the console
 Congrats! You are ready to start building!
 
 ## Future features and additions:
-- Air support for live reloading, https://github.com/air-verse/air
-- Option to spin up a databaseless project to make it fit more use cases, to also be more customizable
-- Cors handling in order to set up a separate front end
+- [ ] Air support for live reloading, https://github.com/air-verse/air
+- [ ] Option to spin up a databaseless project to make it fit more use cases, to also be more customizable
+- [x] Cors handling in order to set up a separate front end, in next release
