@@ -32,6 +32,7 @@ func (s *ApiService) Run() error {
     
     router.Use(middleware.Logger())
     router.Use(middleware.Recover())
+    //router.Use(middleware.CORS())
 
     server := http.Server {
         Addr:           s.addr,
