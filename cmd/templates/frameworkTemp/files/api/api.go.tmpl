@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"net/http"
 	"database/sql"
+    //"github.com/rs/cors"
 	"{{.ProjectName}}/routes"
 	"{{.ProjectName}}/middleware"
 	data "{{.ProjectName}}/stores"
@@ -30,9 +31,14 @@ func NewApiService(addr string, db *sql.DB) *ApiService {
 func (s *ApiService) Run() error {
     router := http.NewServeMux()
 
+    //if you wish to enable CORS, uncomment the following code, delete the current,
+    //Handler: middleware.Logging(router) in server and uncomment Handler: c
+    //c := cors.Default().Handler(middleware.Logging(router))
+
     server := http.Server {
         Addr:           s.addr,
         Handler:        middleware.Logging(router),
+        //Handler:       c,
         IdleTimeout:    time.Minute,
         ReadTimeout:    10 * time.Second,
         WriteTimeout:   30 * time.Second,
