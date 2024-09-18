@@ -74,6 +74,16 @@ func GoGetPackage(appDirectory string, packages []string) error {
     return nil
 }
 
+func GoInstallPackage(appDirectory string, packages []string) error {
+    for _, packageName := range packages {
+        if err := ExecuteCmd("go", []string{"install", "-u", packageName}, appDirectory); err != nil {
+            return err
+        }
+    }
+
+    return nil
+}
+
 func GoFormat(appDirectory string) error {
     if err := ExecuteCmd("gofmt", []string{"-s", "-w", "."}, appDirectory); err != nil {
         return err

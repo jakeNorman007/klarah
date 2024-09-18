@@ -17,3 +17,7 @@ up:
 down:
 	@echo migrating down
 	cd ./migrations && goose ${GOOSE_DRIVER} ${DB_URL} down
+
+# Live Reload
+watch:
+	@air

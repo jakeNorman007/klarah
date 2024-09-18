@@ -1,18 +1,19 @@
 package program
 
 import (
-	"os"
 	"log"
-	"strings"
+	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
-	"github.com/spf13/cobra"
-	tea "github.com/charmbracelet/bubbletea"
+
 	"github.com/JakeNorman007/klarah/cmd/flags"
-	"github.com/JakeNorman007/klarah/cmd/utilities"
 	tpl "github.com/JakeNorman007/klarah/cmd/templates"
 	"github.com/JakeNorman007/klarah/cmd/templates/dbDriverTemp"
 	"github.com/JakeNorman007/klarah/cmd/templates/frameworkTemp"
+	"github.com/JakeNorman007/klarah/cmd/utilities"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/spf13/cobra"
 )
 
 type Project struct {
@@ -65,6 +66,7 @@ var (
     //general packages
     godotenvPackage = []string{"github.com/joho/godotenv"}
     goosePackage = []string{"github.com/pressly/goose/v3/cmd/goose@latest"}
+    airPackage = []string{"github.com/air-verse/air@latest"}
 )
 
 const (
