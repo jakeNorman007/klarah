@@ -5,6 +5,9 @@ import _ "embed"
 //go:embed files/api/ginApi.go.tmpl
 var ginApiTemplate []byte
 
+//go:embed
+var ginNoDBApiTemplate []byte
+
 //go:embed files/handlers/ginHelloWorld_handler.go.tmpl
 var ginHandlersTemplate []byte
 
@@ -35,6 +38,10 @@ func (e GinTemplate) Main() []byte {
 
 func (e GinTemplate) Api() []byte {
     return ginApiTemplate
+}
+
+func (e GinTemplate) NoDBApi() []byte {
+    return ginNoDBApiTemplate
 }
 
 func (e GinTemplate) Handlers() []byte {

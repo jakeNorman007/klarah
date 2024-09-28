@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
-
 	"github.com/JakeNorman007/klarah/cmd/flags"
 	tpl "github.com/JakeNorman007/klarah/cmd/templates"
 	"github.com/JakeNorman007/klarah/cmd/templates/dbDriverTemp"
@@ -39,6 +38,7 @@ type Driver struct {
 type Templater interface {
     Main()          []byte
     Api()           []byte
+    NoDBApi()       []byte
     Handlers()      []byte
     Middleware()    []byte
     Migrations()    []byte
@@ -66,7 +66,6 @@ var (
     //general packages
     godotenvPackage = []string{"github.com/joho/godotenv"}
     goosePackage = []string{"github.com/pressly/goose/v3/cmd/goose@latest"}
-    airPackage = []string{"github.com/air-verse/air@latest"}
 )
 
 const (
@@ -181,6 +180,10 @@ func (p *Project) CreateMainFile() error {
             return err
         }
 
+        //TODO:
+        // Add an else if here for DBDriver == "none"
+    } else if p.DBDriver == "none" {
+
     }
 
     err = utilities.GoGetPackage(projectPath, godotenvPackage)
@@ -279,6 +282,7 @@ func (p *Project) CreateMainFile() error {
             cobra.CheckErr(err)
             return err
         }
+
     } else if p.ProjectType == "chi" {
         err = p.CreatePath(utilsPath, projectPath)
         if err != nil {
@@ -454,6 +458,9 @@ func (p *Project) CreateFileAndInjectTemp(pathToCreate string, projectPath strin
         err = createdTemplate.Execute(createdFile, p)
     case "api":
         createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Api())))
+        err = createdTemplate.Execute(createdFile, p)
+    case "noApi":
+        createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.NoDBApi())))
         err = createdTemplate.Execute(createdFile, p)
     case "handlers":
         createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Handlers())))

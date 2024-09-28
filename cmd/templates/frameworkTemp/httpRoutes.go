@@ -5,6 +5,9 @@ import _"embed"
 //go:embed files/api/api.go.tmpl
 var standardApiTemplate []byte
 
+//go:embed
+var standardNoDBApiTemplate []byte
+
 //go:embed files/handlers/helloWorld_handler.go.tmpl
 var standardHandlersTemplate []byte
 
@@ -37,6 +40,10 @@ func (s StandardLibTemplate) Main() []byte {
 
 func (s StandardLibTemplate) Api() []byte {
     return standardApiTemplate
+}
+
+func (s StandardLibTemplate) NoDBApi() []byte {
+    return standardNoDBApiTemplate
 }
 
 func (s StandardLibTemplate) Handlers() []byte {

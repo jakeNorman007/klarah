@@ -56,6 +56,10 @@ func InitStep(frameworkType flags.Framework, databaseType flags.Database) *Step 
                         Title: "sqlite",
                         Description: "Lightweight, self-contained SQL database engine",
                     },
+                    {
+                        Title: "none",
+                        Description: "No database for your project",
+                    },
                 },
                 Headers: "------------------------------- Database drivers -------------------------------",
                 Field: frameworkType.String(),
