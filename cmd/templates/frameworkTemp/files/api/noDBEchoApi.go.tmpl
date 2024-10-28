@@ -1,0 +1,45 @@
+package api
+
+import (
+	"os"
+	"fmt"
+	"time"
+	"strconv"
+	"net/http"
+	"database/sql"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+  "{{.ProjectName}}/handlers"
+)
+
+type ApiService struct {
+    addr    string
+}
+
+func NewApiService(addr string, db *sql.DB) *ApiService {
+    port, _ := strconv.Atoi(os.Getenv("PORT")) 
+
+    return &ApiService{
+        addr:   fmt.Sprintf(":%d", port),
+    }
+}
+
+func (s *ApiService) Run() error {
+    router := echo.New()
+    
+    router.Use(middleware.Logger())
+    router.Use(middleware.Recover())
+
+    server := http.Server {
+        Addr:           s.addr,
+        Handler:        router,
+        IdleTimeout:    time.Minute,
+        ReadTimeout:    10 * time.Second,
+        WriteTimeout:   30 * time.Second,
+    }
+
+    router.GET("/", handlers.HelloWorldHandler)
+
+    fmt.Println("Server listening on port", s.addr)
+    return server.ListenAndServe()
+}

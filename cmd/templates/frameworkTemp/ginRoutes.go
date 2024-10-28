@@ -5,7 +5,7 @@ import _ "embed"
 //go:embed files/api/ginApi.go.tmpl
 var ginApiTemplate []byte
 
-//go:embed
+//go:embed files/api/noDBGinApi.go.tmpl
 var ginNoDBApiTemplate []byte
 
 //go:embed files/handlers/ginHelloWorld_handler.go.tmpl
@@ -34,6 +34,10 @@ type GinTemplate struct {}
 
 func (e GinTemplate) Main() []byte {
     return mainTemplate
+}
+
+func (e GinTemplate) MainNoDB() []byte {
+    return mainNoDBTemplate
 }
 
 func (e GinTemplate) Api() []byte {

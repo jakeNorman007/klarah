@@ -1,0 +1,49 @@
+package api
+
+import (
+	"os"
+	"fmt"
+	"time"
+	"strconv"
+	"net/http"
+	"database/sql"
+	"github.com/gin-gonic/gin"
+  "{{.ProjectName}}/handlers"
+)
+
+type ApiService struct {
+    addr    string
+    db      *sql.DB
+}
+
+func NewApiService(addr string, db *sql.DB) *ApiService {
+    port, _ := strconv.Atoi(os.Getenv("PORT")) 
+
+    return &ApiService{
+        addr:   fmt.Sprintf(":%d", port),
+        db:     db,
+    }
+}
+
+func (s *ApiService) Run() error {
+    // when using Gin, it runs in debug mode by default, on server start
+    // you will see some debug information. If you are using for production
+    // or do not want to see the debug info, uncomment the following code
+
+    //gin.SetMode(gin.ReleaseMode)
+
+    router := gin.Default()
+
+    server := http.Server {
+        Addr:           s.addr,
+        Handler:        router,
+        IdleTimeout:    time.Minute,
+        ReadTimeout:    10 * time.Second,
+        WriteTimeout:   30 * time.Second,
+    }
+
+    router.GET("/", handlers.HelloWorldHandler)
+
+    fmt.Println("Server listening on port", s.addr)
+    return server.ListenAndServe()
+}

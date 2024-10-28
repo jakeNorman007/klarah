@@ -5,7 +5,7 @@ import _ "embed"
 //go:embed files/api/chiApi.go.tmpl
 var chiApiTemplate []byte
 
-//go:embed
+//go:embed files/api/noDBChiApi.go.tmpl
 var chiNoDBApiTemplate []byte
 
 //go:embed files/handlers/helloWorld_handler.go.tmpl
@@ -35,6 +35,10 @@ type ChiTemplate struct {}
 
 func (e ChiTemplate) Main() []byte {
     return mainTemplate
+}
+
+func (e ChiTemplate) MainNoDB() []byte {
+    return mainNoDBTemplate
 }
 
 func (e ChiTemplate) Api() []byte {

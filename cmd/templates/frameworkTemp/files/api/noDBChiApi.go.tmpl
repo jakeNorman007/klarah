@@ -1,0 +1,56 @@
+package api
+
+import (
+	"os"
+	"fmt"
+	"time"
+	"strconv"
+	"net/http"
+	"database/sql"
+	"github.com/go-chi/chi/v5"
+  //"github.com/go-chi/cors"
+	"github.com/go-chi/chi/v5/middleware"
+  "{{.ProjectName}}/handlers"
+)
+
+type ApiService struct {
+    addr    string
+    db      *sql.DB
+}
+
+func NewApiService(addr string, db *sql.DB) *ApiService {
+    port, _ := strconv.Atoi(os.Getenv("PORT")) 
+
+    return &ApiService{
+        addr:   fmt.Sprintf(":%d", port),
+        db:     db,
+    }
+}
+
+func (s *ApiService) Run() error {
+    router := chi.NewRouter()
+    
+    router.Use(middleware.Logger)
+    router.Use(middleware.Recoverer)
+    //router.Use(cors.Handler(cors.Options{
+    //    AllowedOrigins:   []string{"https://*", "http://*"},
+    //    AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+    //    AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+    //    ExposedHeaders:   []string{"Link"},
+    //    AllowCredentials: false,
+    //    MaxAge:           300,
+    //}))
+
+    server := http.Server {
+        Addr:           s.addr,
+        Handler:        router,
+        IdleTimeout:    time.Minute,
+        ReadTimeout:    10 * time.Second,
+        WriteTimeout:   30 * time.Second,
+    }
+
+    router.Get("/", handlers.HelloWorldHandler)
+
+    fmt.Println("Server listening on port", s.addr)
+    return server.ListenAndServe()
+}

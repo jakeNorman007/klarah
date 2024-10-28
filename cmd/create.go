@@ -17,23 +17,12 @@ import (
 	"github.com/JakeNorman007/klarah/cmd/ui/textInput"
 )
 
-const logo = `
-               __    _____      ______  _______   ______  ___   ___
-              |  |  /  /  |    / ____ \|  ____ \ / ____ \|   | |   |
-              |  | /  /   |   |  |  |  |  |  |  |  |  |  |   | |   |
-              |  |/  /|   |   |  |  |  |  |  |  |  |  |  |   | |   |
-              |  /  / |   |   |  |__|  |  |__|  |  |__|  |   |_|   |
-              |    /  |   |   |  ____  |       /|  ____  |   ___   |
-              |    \  |   |   |  |  |  |  \   \ |  |  |  |   | |   | 
-              |  \  \ |   |   |  |  |  |  |\   \|  |  |  |   | |   |
-              |  |\  \|   ----|  |  |  |  | \   \  |  |  |   | |   |
-              |__| \__\_______|__|  |__|__|  \___\_|  |__|___| |___|
-            `
+const logo = `Klarah`
 
 
 var (
-    logoStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00")).Bold(true)
-	endingMsgStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#50DA00")).Bold(true)
+    logoStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#59DA00")).Bold(true)
+	  endingMsgStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#50DA00")).Bold(true)
 )
 
 func init() {
@@ -42,7 +31,7 @@ func init() {
 
     rootCmd.AddCommand(createCmd)
 
-    createCmd.Flags().StringP("name", "n", "", "Name of project")
+    createCmd.Flags().StringP("name", "n", "", "project name")
     createCmd.Flags().VarP(&flagFramework, "framework", "f", fmt.Sprintf("Frameworks to use: %s", strings.Join(flags.FrameworkTypes, ", ")))
     createCmd.Flags().VarP(&flagDBDriver, "database driver", "d", fmt.Sprintf("Databases to use: %s", strings.Join(flags.DatabaseTypes, ", ")))
 }
@@ -70,7 +59,7 @@ var createCmd = &cobra.Command {
 
 
         flagFramework := flags.Framework(cmd.Flag("framework").Value.String())
-		flagDBDriver := flags.Database(cmd.Flag("database driver").Value.String())
+		    flagDBDriver := flags.Database(cmd.Flag("database driver").Value.String())
 
         options := Options {
             ProjectName:  &textInput.Output{},

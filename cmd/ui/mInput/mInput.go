@@ -96,20 +96,20 @@ func (m model) View() string {
     for i, choice := range m.choices {
         cursor := " "
         if m.cursor == i {
-            cursor = focusStyle.Render("->")
+            cursor = focusStyle.Render(">")
             choice.Title = selectedItemStyle.Render(choice.Title)
             choice.Description = selectedItemStyle.Render(choice.Description)
         }
 
         checked := " "
         if _, ok := m.selected[i]; ok {
-            checked = focusStyle.Render("*")
+            checked = focusStyle.Render("•")
         }
 
         title := focusStyle.Render(choice.Title)
         description := focusStyle.Render(choice.Description)
 
-        s += fmt.Sprintf("%s %s %s: %s\n\n", cursor, checked, title, description)
+        s += fmt.Sprintf("%s [%s] %s: %s\n\n", cursor, checked, title, description)
     }
 
     s += fmt.Sprintf("Press %s to select and %s to confirm your choice, %s to exit.\n\n", yStyle.Render("enter"), yStyle.Render("y"), yStyle.Render("Ctrl-c"))

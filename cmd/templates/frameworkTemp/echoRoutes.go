@@ -5,7 +5,7 @@ import _ "embed"
 //go:embed files/api/echoApi.go.tmpl
 var echoApiTemplate []byte
 
-//go:embed
+//go:embed files/api/noDBEchoApi.go.tmpl
 var echoNoDBApiTemplate []byte
 
 //go:embed files/handlers/echoHelloWorld_handler.go.tmpl
@@ -34,6 +34,10 @@ type EchoTemplate struct {}
 
 func (e EchoTemplate) Main() []byte {
     return mainTemplate
+}
+
+func (e EchoTemplate) MainNoDB() []byte {
+    return mainNoDBTemplate
 }
 
 func (e EchoTemplate) Api() []byte {

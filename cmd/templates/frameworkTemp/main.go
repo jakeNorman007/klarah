@@ -5,6 +5,9 @@ import _"embed"
 //go:embed files/cmd/main.go.tmpl
 var mainTemplate []byte
 
+//go:embed files/cmd/mainNoDB.go.tmpl
+var mainNoDBTemplate []byte
+
 //go:embed files/README.md.tmpl
 var readmeTemplate []byte
 
