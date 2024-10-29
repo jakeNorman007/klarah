@@ -20,10 +20,10 @@ var standardMigrationsTemplate []byte
 //go:embed files/routes/posts_routes.go.tmpl
 var standardRoutesTemplate []byte
 
-//go:embed files/stores/posts_data.go.tmpl
+//go:embed files/queries/posts_data.go.tmpl
 var standardStoresTemplate []byte
 
-//go:embed files/types/posts.go.tmpl
+//go:embed files/models/posts.go.tmpl
 var standardTypesTemplate []byte
 
 //go:embed files/utils/json_utils.go.tmpl
@@ -66,11 +66,11 @@ func (s StandardLibTemplate) Routes() []byte {
     return standardRoutesTemplate
 }
 
-func (s StandardLibTemplate) Stores() []byte {
+func (s StandardLibTemplate) Queries() []byte {
     return standardStoresTemplate
 }
 
-func (s StandardLibTemplate) Types() []byte {
+func (s StandardLibTemplate) Models() []byte {
     return standardTypesTemplate
 }
 

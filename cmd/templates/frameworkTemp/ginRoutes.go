@@ -17,10 +17,10 @@ var ginMigrationsTemplate []byte
 //go:embed files/routes/gin_posts_routes.go.tmpl
 var ginRoutesTemplate []byte
 
-//go:embed files/stores/posts_data.go.tmpl
+//go:embed files/queries/posts_data.go.tmpl
 var ginStoresTemplate []byte
 
-//go:embed files/types/posts.go.tmpl
+//go:embed files/models/posts.go.tmpl
 var ginTypesTemplate []byte
 
 var ginMiddlewareTemplate []byte
@@ -60,11 +60,11 @@ func (e GinTemplate) Routes() []byte {
     return ginRoutesTemplate
 }
 
-func (e GinTemplate) Stores() []byte {
+func (e GinTemplate) Queries() []byte {
     return ginStoresTemplate
 }
 
-func (e GinTemplate) Types() []byte {
+func (e GinTemplate) Models() []byte {
     return ginTypesTemplate
 }
 

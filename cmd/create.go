@@ -31,7 +31,7 @@ func init() {
 
     rootCmd.AddCommand(createCmd)
 
-    createCmd.Flags().StringP("name", "n", "", "project name")
+    createCmd.Flags().StringP("name", "n", "", "project")
     createCmd.Flags().VarP(&flagFramework, "framework", "f", fmt.Sprintf("Frameworks to use: %s", strings.Join(flags.FrameworkTypes, ", ")))
     createCmd.Flags().VarP(&flagDBDriver, "database driver", "d", fmt.Sprintf("Databases to use: %s", strings.Join(flags.DatabaseTypes, ", ")))
 }
@@ -80,7 +80,7 @@ var createCmd = &cobra.Command {
         fmt.Printf("%s\n", logoStyle.Render(logo))
 
         if project.ProjectName == "" {
-            tprogram := tea.NewProgram(textInput.InitTextInputModel(options.ProjectName, "project name ", project))
+            tprogram := tea.NewProgram(textInput.InitTextInputModel(options.ProjectName, "project ", project))
             if _, err := tprogram.Run(); err != nil {
                 log.Printf("Project name contains an error: %v", err)
                 cobra.CheckErr(textInput.CreateErrorInputModel(err).Err())

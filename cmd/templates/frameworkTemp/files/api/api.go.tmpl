@@ -11,7 +11,7 @@ import (
   //"github.com/rs/cors"
 	"{{.ProjectName}}/routes"
 	"{{.ProjectName}}/middleware"
-	data "{{.ProjectName}}/stores"
+	data "{{.ProjectName}}/queries"
 )
 
 type ApiService struct {
@@ -44,8 +44,8 @@ func (s *ApiService) Run() error {
         WriteTimeout:   30 * time.Second,
     }
 
-    postStore := data.NewStore(s.db)
-    handlers := routes.NewHandler(postStore)
+    postModel := data.NewModel(s.db)
+    handlers := routes.NewHandler(postModel)
     handlers.ApiRoutes(router)
 
     log.Println("Server listeneing on port", s.addr)

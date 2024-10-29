@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"database/sql"
 	"github.com/gin-gonic/gin"
-    //"github.com/gin-contrib/cors"
+  //"github.com/gin-contrib/cors"
 	"{{.ProjectName}}/routes"
-	data "{{.ProjectName}}/stores"
+	data "{{.ProjectName}}/queries"
 )
 
 type ApiService struct {
@@ -55,8 +55,8 @@ func (s *ApiService) Run() error {
         WriteTimeout:   30 * time.Second,
     }
 
-    postStore := data.NewStore(s.db)
-    handlers := routes.NewHandler(postStore)
+    postModel := data.NewModel(s.db)
+    handlers := routes.NewHandler(postModel)
     handlers.ApiRoutes(router)
 
     fmt.Println("Server listening on port", s.addr)

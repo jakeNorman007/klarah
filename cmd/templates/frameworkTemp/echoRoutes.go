@@ -19,10 +19,10 @@ var echoMigrationsTemplate []byte
 //go:embed files/routes/echo_posts_routes.go.tmpl
 var echoRoutesTemplate []byte
 
-//go:embed files/stores/posts_data.go.tmpl
+//go:embed files/queries/posts_data.go.tmpl
 var echoStoresTemplate []byte
 
-//go:embed files/types/posts.go.tmpl
+//go:embed files/models/posts.go.tmpl
 var echoTypesTemplate []byte
 
 var echoUtilsTemplate []byte
@@ -60,11 +60,11 @@ func (e EchoTemplate) Routes() []byte {
     return echoRoutesTemplate
 }
 
-func (e EchoTemplate) Stores() []byte {
+func (e EchoTemplate) Queries() []byte {
     return echoStoresTemplate
 }
 
-func (e EchoTemplate) Types() []byte {
+func (e EchoTemplate) Models() []byte {
     return echoTypesTemplate
 }
 

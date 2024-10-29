@@ -72,7 +72,7 @@ klarah new
 
 You will then be prompted to create a project, once it's named press enter:
 ```
-project name > your_project_name
+name > your_project_name
 ```
 
 Next you will see these prompts and asked to pick a framework, followed by a database.

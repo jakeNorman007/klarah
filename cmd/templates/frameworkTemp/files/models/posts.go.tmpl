@@ -1,6 +1,6 @@
-package types
+package models
 
-type PostsStore interface {
+type PostsModel interface {
     CreatePost(Post) error
     GetPosts() ([]*Post, error)
     GetPostById(id int) (*Post, error)

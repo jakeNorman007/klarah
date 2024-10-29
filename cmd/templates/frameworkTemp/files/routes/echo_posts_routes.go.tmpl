@@ -4,16 +4,16 @@ import (
 	"strconv"
 	"net/http"
 	"github.com/labstack/echo/v4"
-	"{{.ProjectName}}/types"
 	"{{.ProjectName}}/handlers"
+	"{{.ProjectName}}/models"
 )
 
 type Handler struct {
-    store types.PostsStore 
+    queries models.PostsModel
 }
 
-func NewHandler(store types.PostsStore) *Handler {
-    return &Handler{store: store}
+func NewHandler(queries models.PostsModel) *Handler {
+    return &Handler{queries: queries}
 }
 
 func (h *Handler) ApiRoutes(e *echo.Echo) {
@@ -27,13 +27,13 @@ func (h *Handler) ApiRoutes(e *echo.Echo) {
 }
 
 func (h *Handler)HandleCreatePost(c echo.Context) error {
-    var post types.Post
+    var post models.Post
 
     if err := c.Bind(&post); err != nil {
         return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Invalid payload"})
     }
 
-    if err := h.store.CreatePost(post); err != nil {
+    if err := h.queries.CreatePost(post); err != nil {
         return c.JSON(http.StatusInternalServerError, map[string]string{"Error": "Failed to create post"})
     }
 
@@ -41,7 +41,7 @@ func (h *Handler)HandleCreatePost(c echo.Context) error {
 }
 
 func (h *Handler)HandleGetPosts(c echo.Context) error {
-    posts, err := h.store.GetPosts()
+    posts, err := h.queries.GetPosts()
     if err != nil {
         return c.JSON(http.StatusInternalServerError, map[string]string{"Error": "Failed to get posts"})
     }
@@ -56,7 +56,7 @@ func (h *Handler)HandleGetPostById(c echo.Context) error {
         return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Post id not found"})
     }
 
-    post, err := h.store.GetPostById(id)
+    post, err := h.queries.GetPostById(id)
     if err != nil {
         return c.JSON(http.StatusInternalServerError, map[string]string{"Error": err.Error()})
     }
@@ -80,7 +80,7 @@ func (h *Handler)HandleUpdatePostById(c echo.Context) error {
         return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Invalid request body"})
     }
 
-    err = h.store.UpdatePostById(id, updateRequestBody.Description)
+    err = h.queries.UpdatePostById(id, updateRequestBody.Description)
     if err != nil {
         return c.JSON(http.StatusBadRequest, map[string]string{"error": "Could not update post"})
     }
@@ -95,7 +95,7 @@ func (h *Handler)HandleDeletePost(c echo.Context) error {
         return c.JSON(http.StatusBadRequest, map[string]string{"Error": "Post id not found"})
     }
 
-    if err := h.store.DeletePost(id); err != nil {
+    if err := h.queries.DeletePost(id); err != nil {
         return err
     }
 

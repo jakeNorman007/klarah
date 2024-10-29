@@ -19,10 +19,10 @@ var chiMigrationsTemplate []byte
 //go:embed files/routes/chi_posts_routes.go.tmpl
 var chiRoutesTemplate []byte
 
-//go:embed files/stores/posts_data.go.tmpl
-var chiStoresTemplate []byte
+//go:embed files/queries/posts_data.go.tmpl
+var chiQueriesTemplate []byte
 
-//go:embed files/types/posts.go.tmpl
+//go:embed files/models/posts.go.tmpl
 var chiTypesTemplate []byte
 
 //go:embed files/utils/json_utils.go.tmpl
@@ -61,11 +61,11 @@ func (e ChiTemplate) Routes() []byte {
     return chiRoutesTemplate
 }
 
-func (e ChiTemplate) Stores() []byte {
-    return chiStoresTemplate
+func (e ChiTemplate) Queries() []byte {
+    return chiQueriesTemplate
 }
 
-func (e ChiTemplate) Types() []byte {
+func (e ChiTemplate) Models() []byte {
     return chiTypesTemplate
 }
 

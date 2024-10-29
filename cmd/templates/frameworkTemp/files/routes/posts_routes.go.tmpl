@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"strconv"
 	"net/http"
-	"{{.ProjectName}}/types"
+	"{{.ProjectName}}/models"
 	"{{.ProjectName}}/utils"
 	"{{.ProjectName}}/handlers"
 )
 
 type Handler struct {
-    store types.PostsStore
+    queries models.PostsModel
 }
 
-func NewHandler(store types.PostsStore) *Handler {
-    return &Handler{store: store}
+func NewHandler(queries models.PostsModel) *Handler {
+    return &Handler{queries: queries}
 }
 
 func (h *Handler) ApiRoutes(router *http.ServeMux) {
@@ -28,12 +28,12 @@ func (h *Handler) ApiRoutes(router *http.ServeMux) {
 }
 
 func (h *Handler) HandleCreatePost(w http.ResponseWriter, r *http.Request) {
-    var post types.Post
+    var post models.Post
     if err := utils.ParseJSON(r, &post); err != nil {
         utils.WriteError(w, http.StatusBadRequest, err)
     }
 
-    err := h.store.CreatePost(post)
+    err := h.queries.CreatePost(post)
     if err != nil {
         utils.WriteError(w, http.StatusBadRequest, err)
     }
@@ -42,7 +42,7 @@ func (h *Handler) HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) HandleGetPosts(w http.ResponseWriter, r *http.Request) {
-    posts, err := h.store.GetPosts()
+    posts, err := h.queries.GetPosts()
     if err != nil {
         utils.WriteError(w, http.StatusInternalServerError, err)
         return
@@ -59,7 +59,7 @@ func (h *Handler) HandleGetPostById(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    post, err := h.store.GetPostById(id)
+    post, err := h.queries.GetPostById(id)
     if err != nil {
         utils.WriteError(w, http.StatusInternalServerError, err)
         return
@@ -83,7 +83,7 @@ func (h *Handler) HandleUpdatePostById(w http.ResponseWriter, r *http.Request) {
         utils.WriteError(w, http.StatusBadRequest, err)
     }
 
-    err = h.store.UpdatePostById(id, UpdateRequestBody.Description)
+    err = h.queries.UpdatePostById(id, UpdateRequestBody.Description)
     if err != nil {
         utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("Could not update post"))
         return
@@ -100,7 +100,7 @@ func (h *Handler) HandleDeletePost(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    if err := h.store.DeletePost(id); err != nil {
+    if err := h.queries.DeletePost(id); err != nil {
         return 
     }
 

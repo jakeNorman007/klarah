@@ -44,9 +44,9 @@ type Templater interface {
   Middleware()    []byte
   Migrations()    []byte
   Routes()        []byte
-  Stores()        []byte
+  Queries()       []byte
   Tests()         []byte
-  Types()         []byte
+  Models()        []byte
   Utils()         []byte
 }
 
@@ -55,16 +55,13 @@ type DBDriverTemplater interface {
 }
 
 var (
-  //framework options and their packages
   echoPackage = []string{"github.com/labstack/echo/v4", "github.com/labstack/echo/v4/middleware"}
   chiPackage = []string{"github.com/go-chi/chi/v5", "github.com/go-chi/chi/v5/middleware"}
   ginPackage = []string{"github.com/gin-gonic/gin"}
 
-  //database driver options and their packages
   postgresqlPackage = []string{"github.com/jackc/pgx/v5/stdlib"}
   sqlitePackage = []string{"github.com/mattn/go-sqlite3"}
 
-  //general packages
   godotenvPackage = []string{"github.com/joho/godotenv"}
   goosePackage = []string{"github.com/pressly/goose/v3/cmd/goose@latest"}
 )
@@ -78,9 +75,9 @@ const (
   middlewarePath = "middleware"
   migrationsPath = "migrations"
   routesPath = "routes"
-  storesPath = "stores"
+  queriesPath = "queries"
   testsPath = "tests"
-  typesPath = "types"
+  modelsPath = "models"
   utilsPath = "utils"
 )
 
@@ -237,16 +234,16 @@ func (p *Project) CreateMainFile() error {
       return err
     }
 
-    err = p.CreatePath(typesPath, projectPath)
+    err = p.CreatePath(modelsPath, projectPath)
     if err != nil {
-      log.Printf("Error in creating path: %s", typesPath)
+      log.Printf("Error in creating path: %s", modelsPath)
       cobra.CheckErr(err)
       return err
     }
 
-    err = p.CreateFileAndInjectTemp(typesPath, projectPath, "posts.go", "types")
+    err = p.CreateFileAndInjectTemp(modelsPath, projectPath, "posts.go", "models")
     if err != nil {
-      log.Printf("Error injecting posts.go file: %s", typesPath)
+      log.Printf("Error injecting posts.go file: %s", modelsPath)
       cobra.CheckErr(err)
       return err
     }
@@ -279,16 +276,16 @@ func (p *Project) CreateMainFile() error {
       return err
     }
 
-    err = p.CreatePath(storesPath, projectPath)
+    err = p.CreatePath(queriesPath, projectPath)
     if err != nil {
-      log.Printf("Error in creating path: %s", storesPath)
+      log.Printf("Error in creating path: %s", queriesPath)
       cobra.CheckErr(err)
       return err
     }
 
-    err = p.CreateFileAndInjectTemp(storesPath, projectPath, "posts_data.go", "stores")
+    err = p.CreateFileAndInjectTemp(queriesPath, projectPath, "posts_data.go", "queries")
     if err != nil {
-      log.Printf("Error injecting posts_data.go file: %s", storesPath)
+      log.Printf("Error injecting posts_data.go file: %s", queriesPath)
       cobra.CheckErr(err)
       return err
     }
@@ -531,14 +528,14 @@ func (p *Project) CreateFileAndInjectTemp(pathToCreate string, projectPath strin
   case "routes":
     createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Routes())))
     err = createdTemplate.Execute(createdFile, p)
-  case "stores":
-    createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Stores())))
+  case "queries":
+    createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Queries())))
     err = createdTemplate.Execute(createdFile, p)
   case "tests":
     createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Tests())))
     err = createdTemplate.Execute(createdFile, p)
-  case "types":
-    createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Types())))
+  case "models":
+    createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Models())))
     err = createdTemplate.Execute(createdFile, p)
   case "utils":
     createdTemplate := template.Must(template.New(fileName).Parse(string(p.FrameworkMap[p.ProjectType].templater.Utils())))
