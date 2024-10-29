@@ -12,7 +12,7 @@ do as much or as little as you want once your project has been generated.
 
 To install Klarah:
 ```
-go install github.com/JakeNorman007/klarah@latest
+go install github.com/JakeNorman007/klarah@v0.1.1
 ```
 
 When installed Klarah creates a binary that attaches directly to your GOPATH, so you can use it whenever you 
@@ -57,12 +57,10 @@ make down
 - [Sqlite](https://github.com/mattn/go-sqlite3)
 
 ## Getting started:
-> [!NOTE]
-> As it is now, Klarah requires a database connection in order to get the server up and running.
 
-Download klarah to your GOPATH using:
+Download klarah to your GOPATH if you haven't using:
 ```
-go install github.com/JakeNorman007/klarah@latest
+go install github.com/JakeNorman007/klarah@v0.1.1
 ```
 
 Once downloaded and ready run the command:
@@ -81,23 +79,28 @@ Next you will see these prompts and asked to pick a framework, followed by a dat
 > Use down arrow or j to move cursor down, up arrow or k to move it up.
 
 ```
----------------------------------- Frameworks ----------------------------------
+klarah
+project > your_new_project
 
-->  standard-library: Standard go library for creating http servers
+===== Frameworks ======================================================== 
 
-    echo: High performing, extensible framework with minimal overhead
+> [•] standard-library: Standard go library for creating http servers
 
-    chi: Lightweight, fast http router that's flexible and powerfull
+  [ ] echo: High performing, extensible framework with minimal overhead
 
-    gin: Flexible, router for efficiant and scalable applications
+  [ ] chi: Lightweight, fast http router that's flexible and powerfull
+
+  [ ] gin: Flexible, router for efficiant and scalable applications
 
 Press enter to select and y to confirm your choice, Ctrl-c to exit.
 
-------------------------------- Database drivers -------------------------------
+===== Database drivers ===================================================
 
-    postgresql: Powerful, open-source relationa database management system
+  [ ] postgresql: Powerful, open-source relationa database management system
 
-    sqlite: Lightweight, self-contained SQL database engine
+  [ ] sqlite: Lightweight, self-contained SQL database engine
+
+  [ ] none: No database for your project
 
 Press enter to select and y to confirm your choice, Ctrl-c to exit.
 ```
@@ -114,12 +117,11 @@ PORT=8080
 DB_URL=postgres://example:example@example.com/example?sslmode=disable
 
 GOOSE_DRIVER=postgres
-GOOSE_DBSTRING=postgres://example:example@example.com/example?sslmode=disable
 ```
 
 Run the command ```make run```
 
-You will get the following output in the console
+You will get the following output in the console, or a similar style of logging
 
 ```
 20XX/XX/XX 00:00:00 Connected to database
